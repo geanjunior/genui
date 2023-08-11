@@ -2,7 +2,7 @@ import { useCallback, useContext, useEffect } from "react";
 import { AppContext } from "../contexts";
 import {
   DesignSystemDna,
-  designSystemConstants,
+  DnaSequence,
   generateRandomIndividual,
   parseToButtonPhenotype,
   parseToTypographyPhenotype
@@ -13,18 +13,27 @@ const useDesignSystemDna = (defaultValue?: number[][]): [DesignSystemDna | undef
 
   const _setDesignSystemDna = useCallback((value: number[][]) => {
     if (value && setDesignSystemDna) {
-      const typographyGens = value[designSystemConstants.TYPOGRAPHY_INDEX];
-      const buttonGens = value[designSystemConstants.BUTTON_INDEX];
-      
+      const typographyGens = value[DnaSequence.Typography];
+      const buttonGens = value[DnaSequence.Button];
+
       const typographyPhens = parseToTypographyPhenotype(typographyGens);
       const buttonPhens = parseToButtonPhenotype(buttonGens, typographyPhens);
 
+      const phenotypeSequenceMap = (() => {
+        const map = [];
+        map[DnaSequence.Typography] = typographyPhens;
+        map[DnaSequence.Button] = buttonPhens;
+        return map;
+      })();
+
+      const phenotypes = Object
+        .values(DnaSequence)
+        .filter(i => !isNaN(Number(i)))
+        .map(i => (phenotypeSequenceMap[i as DnaSequence]))
+
       setDesignSystemDna!({
         genotypes: value,
-        phenotypes: [
-          typographyPhens,
-          buttonPhens
-        ]
+        phenotypes: phenotypes
       });
     }
   }, [setDesignSystemDna]);

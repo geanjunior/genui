@@ -1,5 +1,5 @@
 import { DesignSystemPhenotype } from ".";
-import { GenotypeValuesSchema, designSystemConstants, designSystemGenotypeSchema } from "..";
+import { GenotypeValuesSchema, DnaSequence, designSystemGenotypeSchema } from "..";
 
 interface GenButtonPhenotype extends DesignSystemPhenotype {
   children: string,
@@ -15,7 +15,7 @@ interface GenButtonPhenotype extends DesignSystemPhenotype {
 
 const parseToTypographyPhenotype = (dna: number[]): string[] => {
   return dna.map((phenIndex, genIndex) => (
-    designSystemGenotypeSchema[designSystemConstants.TYPOGRAPHY_INDEX][genIndex] as GenotypeValuesSchema
+    designSystemGenotypeSchema[DnaSequence.Typography][genIndex] as GenotypeValuesSchema
   ).values[phenIndex]);
 }
 

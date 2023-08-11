@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { GenButtonPhenotype, designSystemConstants, useDesignSystemDna } from "../../genetic-library";
+import { GenButtonPhenotype, DnaSequence, useDesignSystemDna } from "../../genetic-library";
 
 interface GenButtonProps extends React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
 
@@ -12,7 +12,7 @@ const GenButton = ({ children, style, ...props }: GenButtonProps) => {
   useEffect(() => {
     if (designSystemDna) {
       setStylePhen({
-        ...(designSystemDna.phenotypes[designSystemConstants.BUTTON_INDEX] as GenButtonPhenotype),
+        ...(designSystemDna.phenotypes[DnaSequence.Button] as GenButtonPhenotype),
         ...style
       });
     }

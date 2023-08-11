@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { GenButtonPhenotype, DnaSequence, useDesignSystemDna } from "../../genetic-library";
+import { GenButtonPhenotype, DnaSequence, useDesignSystemDna } from "../../genetic";
 
 interface GenButtonProps extends React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
 

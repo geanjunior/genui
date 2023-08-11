@@ -1,9 +1,9 @@
 import { useCallback, useEffect } from "react";
-import GenButton from "./components/button/button"
-import { generateRandomIndividual, useDesignSystemRandomDna } from "./genetic-library";
+import { generateRandomIndividual, useRandomDesignSystemDna } from "./genetic";
+import GenButton from "./genetic/components/button";
 
 function App() {
-  const [ designSystemDna, setDesignSystemDna] = useDesignSystemRandomDna();
+  const [ designSystemDna, setDesignSystemDna] = useRandomDesignSystemDna();
 
   useEffect(() => {
     console.log('designSystemDna.genotypes: ', JSON.stringify(designSystemDna?.genotypes));

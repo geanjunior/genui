@@ -3,46 +3,25 @@ import { DnaSequence, Phenotype } from "..";
 interface GenColorPalettePhenotype extends Phenotype {
   primary: string,
   secondary: string,
-  neutral: string
+  tertiary: string,
+  quaternary: string,
+  quintennary: string
 }
 
 const colorPalettePhenotype: GenColorPalettePhenotype[] = [
-  /* Sunny - A bright and cheerful palette that is perfect for a summery feel. */
-  { primary: "#FFD700", secondary: "#29ABCA", neutral: "#FFFFFF" },
-  // /* Oceanic - A calming and relaxing palette that is perfect for a beachy or nautical theme. */
-  // { primary: "#007ACC", secondary: "#C5E1A5", neutral: "#FFFFFF" },
-  // /* Sunset - A vibrant and energetic palette that is perfect for a party or a celebration. */
-  // { primary: "#FF5722", secondary: "#E066FF", neutral: "#FFFFFF" },
-  // /* Autumnal - A warm and earthy palette that is perfect for the fall season. */
-  // { primary: "#E67E22", secondary: "#90EE90", neutral: "#FFFFFF" },
-  // /* Wintery - A cool and crisp palette that is perfect for the winter season. */
-  // { primary: "#1E90FF", secondary: "#D3D3D3", neutral: "#FFFFFF" },
-  // /* Monochromatic - A simple and elegant palette that is perfect for a minimalist or modern design. */
-  // { primary: "#333333", secondary: "#666666", neutral: "#FFFFFF" },
-  // /* Pastel - A soft and gentle palette that is perfect for a calming or relaxing space. */
-  // { primary: "#87CEFA", secondary: "#F0FFFF", neutral: "#FFFFFF" },
-  // /* Neon - A bright and eye-catching palette that is perfect for a pop of color. */
-  // { primary: "#FF00FF", secondary: "#00FFFF", neutral: "#FFFFFF" },
-  // /* Earthy - A warm and natural palette that is perfect for a cozy or inviting space. */
-  // { primary: "#7B68EE", secondary: "#BDB76B", neutral: "#FFFFFF" },
-  // /* Cobalt - A cool and refreshing palette that is perfect for a modern or minimalist design. */
-  // { primary: "#3498DB", secondary: "#A9D0F5", neutral: "#FFFFFF" },
-  // /* Forest - A calming and natural palette that is perfect for a spa or wellness center. */
-  // { primary: "#556B2F", secondary: "#728942", neutral: "#FFFFFF" },
-  // /* Passion - A vibrant and energetic palette that is perfect for a party or a celebration. */
-  // { primary: "#FF6A00", secondary: "#FFC300", neutral: "#FFFFFF" },
-  // /* Emerald - A luxurious and sophisticated palette that is perfect for a high-end brand or product. */
-  // { primary: "#1ABC9C", secondary: "#42A5F5", neutral: "#FFFFFF" },
-  // /* Banana - A cheerful and playful palette that is perfect for a children's product or website. */
-  // { primary: "#9ACD32", secondary: "#D4E157", neutral: "#FFFFFF" },
-  // /* Lilac - A romantic and feminine palette that is perfect for a wedding or a beauty product. */
-  // { primary: "#B39DDB", secondary: "#D8BFD8", neutral: "#FFFFFF" },
-  // /* Ocean - A serene and calming palette that is perfect for a beach or spa theme. */
-  // { primary: "#5F9EA0", secondary: "#87CEEB", neutral: "#FFFFFF" },
-  // /* Peach - A warm and inviting palette that is perfect for a home decor or food brand. */
-  // { primary: "#FFF176", secondary: "#FFE5B4", neutral: "#FFFFFF" },
-  // /* Rust - A rustic and earthy palette that is perfect for a farmhouse or outdoor brand. */
-  // { primary: "#8D6E63", secondary: "#BD978E", neutral: "#FFFFFF" }
+  // { primary: "#A7C5C5 ", secondary: "#DEE0D5", tertiary: "#E2AC48", quaternary: "#B96028", quintennary: "#983C2D" },
+  // { primary: "#00747C ", secondary: "#00BBC9", tertiary: "#CACACA", quaternary: "#878787", quintennary: "#202022" },
+  // { primary: "#F2F2F2 ", secondary: "#D9D9D9", tertiary: "#A6A6A6", quaternary: "#8C8C8C", quintennary: "#737373" },
+  // { primary: "#001542 ", secondary: "#085454", tertiary: "#7A7A7A", quaternary: "#FFFFFF", quintennary: "#FFB30D" },
+
+  // { primary: "#A6785D ", secondary: "#594032", tertiary: "#D9A384", quaternary: "#F2F2F2", quintennary: "#0D0D0D" },
+  // { primary: "#0742F2 ", secondary: "#527AF2", tertiary: "#9BB8F2", quaternary: "#BBCDF2", quintennary: "#1A2126" },
+  // { primary: "#F2BB13 ", secondary: "#F28D35", tertiary: "#F2F2F2", quaternary: "#BFBFBF", quintennary: "#0D0D0D" },
+  // { primary: "#04D9D9 ", secondary: "#5FD9D9", tertiary: "#94F2F2", quaternary: "#B6F2F2", quintennary: "#F2F2F2" },
+  // { primary: "#80838C ", secondary: "#012619", tertiary: "#BF9F78", quaternary: "#F2F2F2", quintennary: "#0D0D0D" },
+  // { primary: "#140DD9 ", secondary: "#1FBF92", tertiary: "#F2E49B", quaternary: "#F27777", quintennary: "#0D0D0D" },
+  // { primary: "#18D935 ", secondary: "#15BF2F", tertiary: "#2DA63F", quaternary: "#D9D9D9", quintennary: "#0D0D0D" },
+  { primary: "#4178BF ", secondary: "#66B1F2", tertiary: "#F0F1F2", quaternary: "#BF877A", quintennary: "#0D0D0D" },
 ];
 
 const parseToColorPalettePhenotype = (genotypes: (string|number)[][]) => {

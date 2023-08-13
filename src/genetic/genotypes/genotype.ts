@@ -1,5 +1,10 @@
 type GenotypeValuesSchema = GenotypeBaseSchema & {
-  values: number[]
+  values: (number | string)[]
+};
+
+type GenotypeDistinctValuesSchema = GenotypeBaseSchema & {
+  name: string,
+  values: (number | string)[]
 };
 
 type GenotypeBaseSchema = { type: string };
@@ -13,11 +18,13 @@ type GenotypeSchemas = GenotypeRangeSchema | GenotypeValuesSchema;
 
 enum Searchspace {
   Values = "values",
+  DistinctValues = "distinct-values",
   Range = "range"
 }
 
 export type {
   GenotypeValuesSchema,
+  GenotypeDistinctValuesSchema,
   GenotypeRangeSchema,
   GenotypeSchemas
 }

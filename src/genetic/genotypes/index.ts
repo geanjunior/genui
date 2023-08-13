@@ -1,7 +1,8 @@
-export * from "./genotype.schema";
+export * from "./genotype";
 
-export * from "./typography.schema";
-export * from "./button.schema";
+export * from "./schemas/color-palette";
+export * from "./schemas/typography";
+export * from "./schemas/button";
 
-export * from "./dna-sequence";
-export * from "./schema";
+export * from "./sequence";
+export * from "./generators";

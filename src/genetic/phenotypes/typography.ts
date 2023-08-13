@@ -9,8 +9,8 @@ const typographyPhenotype = [
   "Brush Script, Copperplate, Zapfino, cursive"
 ];
 
-const parseToTypographyPhenotype = (genotypes: number[][]) => {
-  return genotypes[DnaSequence.Typography].map(phenIndex => typographyPhenotype[phenIndex]);
+const parseToTypographyPhenotype = (genotypes: (string|number)[][]) => {
+  return genotypes[DnaSequence.Typography].map(phenIndex => typographyPhenotype[phenIndex as number]);
 }
 
 export { typographyPhenotype, parseToTypographyPhenotype }

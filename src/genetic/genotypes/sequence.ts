@@ -1,14 +1,14 @@
-import { GenotypeSchemas, buttonGenotypeSchema, typographyGenotypeSchema } from ".";
+import { GenotypeSchemas, buttonGenotypeSchema, colorPaletteSchema, typographyGenotypeSchema } from ".";
 
 enum DnaSequence {
-  CollorPalette,
+  ColorPalette,
   Typography,
   Button
 }
 
 const genotypeSequenceMap = ((): GenotypeSchemas[][] => {
   const map = [];
-  map[DnaSequence.CollorPalette] = [];
+  map[DnaSequence.ColorPalette] = colorPaletteSchema;
   map[DnaSequence.Typography] = typographyGenotypeSchema;
   map[DnaSequence.Button] = buttonGenotypeSchema;
   return map;

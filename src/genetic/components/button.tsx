@@ -19,7 +19,7 @@ const GenButton = ({ children, style, ...props }: GenButtonProps) => {
   }, [style, designSystemDna]);
 
   return <>
-    <button style={stylePhen} {...props}>{children}</button>
+    <button style={{ ...stylePhen }} {...props}>{children}</button>
   </>
 }
 

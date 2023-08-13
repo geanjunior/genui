@@ -1,20 +1,20 @@
-import { DnaSequence, parseToButtonPhenotype, parseToTypographyPhenotype } from ".";
+import { DnaSequence, parseToButtonPhenotype, parseToColorPalettePhenotype, parseToTypographyPhenotype } from ".";
 
 interface Phenotype {
 
 }
 
 interface Dna {
-  genotypes: number[][]
+  genotypes: (string | number)[][]
   phenotypes: Phenotype[]
 }
 
-const parsePhenotypes = (genotypes: number[][]) => {
+const parsePhenotypes = (genotypes: (string | number)[][]) => {
   const phenotypeSequenceMap = (() => {
-    const map = [];
-    map[DnaSequence.CollorPalette] = [];
+    const map: (string | Phenotype)[] = [];
+    map[DnaSequence.ColorPalette] = parseToColorPalettePhenotype(genotypes);
     map[DnaSequence.Typography] = parseToTypographyPhenotype(genotypes);
-    map[DnaSequence.Button] = parseToButtonPhenotype(genotypes, map[DnaSequence.Typography]);
+    map[DnaSequence.Button] = parseToButtonPhenotype(genotypes, map);
     return map;
   })();
 

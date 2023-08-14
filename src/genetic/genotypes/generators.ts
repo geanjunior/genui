@@ -3,16 +3,18 @@ import { DnaSequence, GenotypeDistinctValuesSchema, GenotypeRangeSchema, Genotyp
 const genotypeSchema = Object
   .values(DnaSequence)
   .filter(i => !isNaN(Number(i)))
-  .map(i => (genotypeSequenceMap[i as DnaSequence]));
+  .map(i => (genotypeSequenceMap[i as DnaSequence] || null));
 
 const generateRandomIndividual = () => {
   const individualGens: { genotypeSchema: GenotypeSchemas, gen: string | number }[][] = [];
   genotypeSchema.forEach(elementSchema => {
     const elementGens: { genotypeSchema: GenotypeSchemas, gen: string | number }[] = [];
     individualGens.push(elementGens);
-    elementSchema.forEach(genotypeSchema => {
-      elementGens.push({ genotypeSchema, gen: generateRandomGenotypeValue(genotypeSchema, individualGens) });
-    });
+    if (elementSchema) {
+      elementSchema.forEach(genotypeSchema => {
+        elementGens.push({ genotypeSchema, gen: generateRandomGenotypeValue(genotypeSchema, individualGens) });
+      });
+    }
   });
   return individualGens.map(element => element.map(gen => gen.gen));
 }

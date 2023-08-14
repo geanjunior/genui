@@ -23,7 +23,7 @@ const GenButton = ({ children, style, ...props }: GenButtonProps) => {
   </>
 }
 
-export default GenButton;
+export { GenButton };
 
 export type {
   GenButtonProps

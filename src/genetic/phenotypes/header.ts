@@ -1,4 +1,4 @@
-import { DnaSequence, GenColorPalettePhenotype, Phenotype } from "..";
+import { DnaSequence, Phenotype } from "..";
 
 interface GenHeaderPhenotype extends Phenotype {
   marginTop?: string,
@@ -10,11 +10,11 @@ interface GenHeaderPhenotype extends Phenotype {
 }
 
 const parseToHeaderPhenotype = (
-  genotypes: (string|number)[][],
+  genotypes: number[][],
   phenotypesMap: (string | Phenotype)[]
 ): GenHeaderPhenotype => {
 
-  const colorPalette = phenotypesMap[DnaSequence.ColorPalette] as GenColorPalettePhenotype;
+  const colorPalette = phenotypesMap[DnaSequence.ColorPalette] as string[];
   const typographyPhenotypes = phenotypesMap[DnaSequence.Typography] as string[];
 
   const headerGens = genotypes[DnaSequence.Header];
@@ -31,7 +31,7 @@ const parseToHeaderPhenotype = (
     fontFamily: typographyPhenotypes[headerGens[++i] as number],
 
     //colors
-    color: colorPalette[headerGens[++i] as (keyof typeof colorPalette)],
+    color: colorPalette[headerGens[++i]],
   } as GenHeaderPhenotype;
 }
 

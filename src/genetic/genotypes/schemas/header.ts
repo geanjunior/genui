@@ -1,7 +1,7 @@
 import { Searchspace, typographyGenotypeSchema } from ".."
 import { colorPalettePhenotype } from "../..";
 
-const colors = Object.keys(colorPalettePhenotype[0]);
+const colors = Object.keys(colorPalettePhenotype[0]).map(k => parseInt(k)).filter(k => !isNaN(k));
 
 const headerGenotypeSchema = [
   { type: Searchspace.Range, from: 0, to: 30 }, //margin-top

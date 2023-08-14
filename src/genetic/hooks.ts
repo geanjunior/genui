@@ -6,14 +6,14 @@ import {
   parsePhenotypes
 } from ".";
 
-const useDesignSystemDna = (defaultGenotypes?: (string | number)[][]) : [
+const useDesignSystemDna = (defaultGenotypes?: number[][]) : [
   Dna | undefined,
-  (genotypes: (string | number)[][]) => void
+  (genotypes: number[][]) => void
 ] => {
 
   const { designSystemDna, setDesignSystemDna } = useContext(GeneticContext);
 
-  const _setDesignSystemDna = useCallback((genotypes: (string | number)[][]) => {
+  const _setDesignSystemDna = useCallback((genotypes: number[][]) => {
     if (genotypes && setDesignSystemDna) {
       const phenotypes = parsePhenotypes(genotypes);
       setDesignSystemDna!({ genotypes, phenotypes });

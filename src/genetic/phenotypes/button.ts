@@ -1,4 +1,4 @@
-import { DnaSequence, GenColorPalettePhenotype, Phenotype } from "..";
+import { DnaSequence, Phenotype } from "..";
 
 interface GenButtonPhenotype extends Phenotype {
   borderStyle?: string,
@@ -17,11 +17,11 @@ interface GenButtonPhenotype extends Phenotype {
 }
 
 const parseToButtonPhenotype = (
-  genotypes: (string|number)[][],
+  genotypes: number[][],
   phenotypesMap: (string | Phenotype)[]
 ): GenButtonPhenotype => {
 
-  const colorPalette = phenotypesMap[DnaSequence.ColorPalette] as GenColorPalettePhenotype;
+  const colorPalette = phenotypesMap[DnaSequence.ColorPalette] as string[];
   const typographyPhenotypes = phenotypesMap[DnaSequence.Typography] as string[];
 
   const buttonGens = genotypes[DnaSequence.Button];
@@ -45,9 +45,9 @@ const parseToButtonPhenotype = (
     fontFamily: typographyPhenotypes[buttonGens[++i] as number],
 
     //colors
-    color: colorPalette[buttonGens[++i] as (keyof typeof colorPalette)],
-    borderColor: colorPalette[buttonGens[++i] as (keyof typeof colorPalette)],
-    backgroundColor: colorPalette[buttonGens[++i] as (keyof typeof colorPalette)],
+    color: colorPalette[buttonGens[++i]],
+    borderColor: colorPalette[buttonGens[++i]],
+    backgroundColor: colorPalette[buttonGens[++i]],
   } as GenButtonPhenotype;
 }
 

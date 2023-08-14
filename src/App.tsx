@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo } from "react";
-import { DnaSequence, GenColorPalettePhenotype, generateRandomIndividual, useRandomDesignSystemDna } from "./genetic";
+import { DnaSequence, generateRandomIndividual, useRandomDesignSystemDna } from "./genetic";
 import { UIColorPalette, GenButton, GenHeader } from "./genetic/components";
 
 import "./App.css"
@@ -9,7 +9,7 @@ function App() {
 
   const colorPalette: string[] = useMemo(() => {
     if (designSystemDna) {
-      return Object.values(designSystemDna?.phenotypes[DnaSequence.ColorPalette] as GenColorPalettePhenotype)
+      return designSystemDna?.phenotypes[DnaSequence.ColorPalette] as string[]
     }
     return [];
   }, [designSystemDna]);

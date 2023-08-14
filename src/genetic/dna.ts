@@ -5,11 +5,11 @@ interface Phenotype {
 }
 
 interface Dna {
-  genotypes: (string | number)[][]
-  phenotypes: Phenotype[]
+  genotypes: number[][]
+  phenotypes: (string | Phenotype)[]
 }
 
-const parsePhenotypes = (genotypes: (string | number)[][]) => {
+const parsePhenotypes = (genotypes: number[][]) => {
   const phenotypeSequenceMap = (() => {
     const map: (string | Phenotype)[] = [];
     map[DnaSequence.ColorPalette] = parseToColorPalettePhenotype(genotypes);

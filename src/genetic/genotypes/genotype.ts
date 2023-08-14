@@ -1,10 +1,10 @@
 type GenotypeValuesSchema = GenotypeBaseSchema & {
-  values: (number | string)[]
+  values: number[]
 };
 
 type GenotypeDistinctValuesSchema = GenotypeBaseSchema & {
   name: string,
-  values: (number | string)[]
+  values: number[]
 };
 
 type GenotypeBaseSchema = { type: string };

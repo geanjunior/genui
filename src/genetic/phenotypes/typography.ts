@@ -33,7 +33,7 @@ const typographyPhenotype = [
   "Luminari, cursive",
 ];
 
-const parseToTypographyPhenotype = (genotypes: (string|number)[][]) => {
+const parseToTypographyPhenotype = (genotypes: number[][]) => {
   return genotypes[DnaSequence.Typography].map(phenIndex => typographyPhenotype[phenIndex as number]);
 }
 

@@ -1,39 +1,27 @@
-import { DnaSequence, Phenotype } from "..";
+import { DnaSequence } from "..";
 
-interface GenColorPalettePhenotype extends Phenotype {
-  primary: string,
-  secondary: string,
-  tertiary: string,
-  quaternary: string,
-  quintennary: string
-}
-
-const colorPalettePhenotype: GenColorPalettePhenotype[] = [
-  { primary: "#A7C5C5", secondary: "#DEE0D5", tertiary: "#E2AC48", quaternary: "#B96028", quintennary: "#983C2D" },
-  { primary: "#00747C", secondary: "#00BBC9", tertiary: "#CACACA", quaternary: "#878787", quintennary: "#202022" },
-  { primary: "#F2F2F2", secondary: "#D9D9D9", tertiary: "#A6A6A6", quaternary: "#8C8C8C", quintennary: "#737373" },
-  { primary: "#001542", secondary: "#085454", tertiary: "#7A7A7A", quaternary: "#FFFFFF", quintennary: "#FFB30D" },
+const colorPalettePhenotype: string[][] = [
+  ["#A7C5C5", "#DEE0D5", "#E2AC48", "#B96028", "#983C2D"],
+  ["#00747C", "#00BBC9", "#CACACA", "#878787", "#202022"],
+  ["#F2F2F2", "#D9D9D9", "#A6A6A6", "#8C8C8C", "#737373"],
+  ["#001542", "#085454", "#7A7A7A", "#FFFFFF", "#FFB30D"],
   
   // UI/UX
-  { primary: "#A6785D", secondary: "#594032", tertiary: "#D9A384", quaternary: "#F2F2F2", quintennary: "#0D0D0D" },
-  { primary: "#0742F2", secondary: "#527AF2", tertiary: "#9BB8F2", quaternary: "#BBCDF2", quintennary: "#1A2126" },
-  { primary: "#F2BB13", secondary: "#F28D35", tertiary: "#F2F2F2", quaternary: "#BFBFBF", quintennary: "#0D0D0D" },
-  { primary: "#04D9D9", secondary: "#5FD9D9", tertiary: "#94F2F2", quaternary: "#B6F2F2", quintennary: "#F2F2F2" },
-  { primary: "#80838C", secondary: "#012619", tertiary: "#BF9F78", quaternary: "#F2F2F2", quintennary: "#0D0D0D" },
-  { primary: "#140DD9", secondary: "#1FBF92", tertiary: "#F2E49B", quaternary: "#F27777", quintennary: "#0D0D0D" },
-  { primary: "#18D935", secondary: "#15BF2F", tertiary: "#2DA63F", quaternary: "#D9D9D9", quintennary: "#0D0D0D" },
-  { primary: "#4178BF", secondary: "#66B1F2", tertiary: "#F0F1F2", quaternary: "#BF877A", quintennary: "#0D0D0D" },
-  { primary: "#152617", secondary: "#BFF205", tertiary: "#84A60A", quaternary: "#D7F205", quintennary: "#0D0D0D" },
-  { primary: "#025928", secondary: "#9BBF9D", tertiary: "#D8D9D7", quaternary: "#CED9B8", quintennary: "#0D0D0D" },
-  { primary: "#9794F2", secondary: "#B6B9F2", tertiary: "#585859", quaternary: "#8D95A6", quintennary: "#F2F2F2" },
+  ["#A6785D", "#594032", "#D9A384", "#F2F2F2", "#0D0D0D"],
+  ["#0742F2", "#527AF2", "#9BB8F2", "#BBCDF2", "#1A2126"],
+  ["#F2BB13", "#F28D35", "#F2F2F2", "#BFBFBF", "#0D0D0D"],
+  ["#04D9D9", "#5FD9D9", "#94F2F2", "#B6F2F2", "#F2F2F2"],
+  ["#80838C", "#012619", "#BF9F78", "#F2F2F2", "#0D0D0D"],
+  ["#140DD9", "#1FBF92", "#F2E49B", "#F27777", "#0D0D0D"],
+  ["#18D935", "#15BF2F", "#2DA63F", "#D9D9D9", "#0D0D0D"],
+  ["#4178BF", "#66B1F2", "#F0F1F2", "#BF877A", "#0D0D0D"],
+  ["#152617", "#BFF205", "#84A60A", "#D7F205", "#0D0D0D"],
+  ["#025928", "#9BBF9D", "#D8D9D7", "#CED9B8", "#0D0D0D"],
+  ["#9794F2", "#B6B9F2", "#585859", "#8D95A6", "#F2F2F2"],
 ];
 
-const parseToColorPalettePhenotype = (genotypes: (string|number)[][]) => {
+const parseToColorPalettePhenotype = (genotypes: number[][]) => {
   return genotypes[DnaSequence.ColorPalette].map(phenIndex => colorPalettePhenotype[phenIndex as number])[0];
-}
-
-export type {
-  GenColorPalettePhenotype
 }
 
 export {

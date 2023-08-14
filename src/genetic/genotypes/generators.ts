@@ -6,9 +6,9 @@ const genotypeSchema = Object
   .map(i => (genotypeSequenceMap[i as DnaSequence] || null));
 
 const generateRandomIndividual = () => {
-  const individualGens: { genotypeSchema: GenotypeSchemas, gen: string | number }[][] = [];
+  const individualGens: { genotypeSchema: GenotypeSchemas, gen: number }[][] = [];
   genotypeSchema.forEach(elementSchema => {
-    const elementGens: { genotypeSchema: GenotypeSchemas, gen: string | number }[] = [];
+    const elementGens: { genotypeSchema: GenotypeSchemas, gen: number }[] = [];
     individualGens.push(elementGens);
     if (elementSchema) {
       elementSchema.forEach(genotypeSchema => {
@@ -21,8 +21,8 @@ const generateRandomIndividual = () => {
 
 const generateRandomGenotypeValue = (
   genSchema: GenotypeSchemas,
-  individualGens: { genotypeSchema: GenotypeSchemas, gen: string | number }[][]
-): string | number => {
+  individualGens: { genotypeSchema: GenotypeSchemas, gen: number }[][]
+): number => {
 
   if (genSchema.type === Searchspace.Range)
     return generateRandomGenotypeValueFromRange(genSchema as GenotypeRangeSchema);
@@ -39,7 +39,7 @@ const generateRandomGenotypeValueFromRange = (genSchema: GenotypeRangeSchema): n
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
-const generateRandomGenotypeValueFromValues = (genSchema: GenotypeValuesSchema): string | number => {
+const generateRandomGenotypeValueFromValues = (genSchema: GenotypeValuesSchema): number => {
   const min = 0;
   const max = genSchema.values.length - 1;
   return genSchema.values[Math.floor(Math.random() * (max - min + 1) + min)];
@@ -47,8 +47,8 @@ const generateRandomGenotypeValueFromValues = (genSchema: GenotypeValuesSchema):
 
 const generateRandomGenotypeDistinctValueFromValues = (
   genSchema: GenotypeDistinctValuesSchema,
-  individualGens: { genotypeSchema: GenotypeSchemas, gen: string | number }[][]
-): string | number => {
+  individualGens: { genotypeSchema: GenotypeSchemas, gen: number }[][]
+): number => {
 
   const exceptGens = individualGens
     .reduce((prev, current) => prev.concat(current), [])

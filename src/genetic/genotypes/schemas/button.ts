@@ -1,7 +1,4 @@
-import { Searchspace, typographyGenotypeSchema } from "..";
-import { colorPalettePhenotype } from "../..";
-
-const colors = Object.keys(colorPalettePhenotype[0]).map(k => parseInt(k)).filter(k => !isNaN(k));
+import { Searchspace, getColorsRule, typographyGenotypeSchema } from "..";
 
 const buttonGenotypeSchema = [
   { type: Searchspace.Range, from: 0, to: 4 }, //border-width
@@ -14,9 +11,9 @@ const buttonGenotypeSchema = [
   { type: Searchspace.Range, from: 0, to: 9 }, //font-weight
   { type: Searchspace.Range, from: 0, to: typographyGenotypeSchema.length - 1 }, //font-family
 
-  { type: Searchspace.DistinctValues, name: "button.colors", values: colors }, //color
-  { type: Searchspace.Values, values: colors }, //border-color
-  { type: Searchspace.DistinctValues, name: "button.colors", values: colors }, //background-color
+  { type: Searchspace.DistinctValuesFromRule, name: "button.colors", rule: getColorsRule }, //color
+  { type: Searchspace.ValuesFromRule, rule: getColorsRule }, //border-color
+  { type: Searchspace.DistinctValuesFromRule, name: "button.colors", rule: getColorsRule }, //background-color
 ];
 
 export { buttonGenotypeSchema }

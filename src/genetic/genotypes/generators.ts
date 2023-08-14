@@ -1,4 +1,4 @@
-import { DnaSequence, GenotypeDistinctValuesSchema, GenotypeRangeSchema, GenotypeSchemas, GenotypeValuesSchema, Searchspace, genotypeSequenceMap } from ".";
+import { DnaSequence, GenotypeDistinctValuesFromRuleSchema, GenotypeDistinctValuesSchema, GenotypeRangeSchema, GenotypeSchemas, GenotypeValuesFromRuleSchema, GenotypeValuesSchema, Searchspace, genotypeSequenceMap } from ".";
 
 const genotypeSchema = Object
   .values(DnaSequence)
@@ -30,6 +30,10 @@ const generateRandomGenotypeValue = (
     return generateRandomGenotypeValueFromValues(genSchema as GenotypeValuesSchema);
   if (genSchema.type === Searchspace.DistinctValues)
     return generateRandomGenotypeDistinctValueFromValues(genSchema as GenotypeDistinctValuesSchema, individualGens);
+  if (genSchema.type === Searchspace.ValuesFromRule)
+    return generateRandomGenotypeValueFromValuesFromRule(genSchema as GenotypeValuesFromRuleSchema, individualGens);
+  if (genSchema.type === Searchspace.DistinctValuesFromRule)
+    return generateRandomGenotypeDistinctValueFromValuesFromRule(genSchema as GenotypeDistinctValuesFromRuleSchema, individualGens);
   return 0;
 };
 
@@ -60,6 +64,39 @@ const generateRandomGenotypeDistinctValueFromValues = (
     }, new Set());
 
   const validValues = genSchema.values.filter(v => !exceptGens.has(v));
+
+  const min = 0;
+  const max = validValues.length - 1;
+  return validValues[Math.floor(Math.random() * (max - min + 1) + min)];
+};
+
+const generateRandomGenotypeValueFromValuesFromRule = (
+  genSchema: GenotypeValuesFromRuleSchema,
+  individualGens: { genotypeSchema: GenotypeSchemas, gen: number }[][]
+): number => {
+  const validValues = genSchema.rule(individualGens);
+
+  const min = genSchema && individualGens && 0;
+  const max = validValues.length - 1;
+  return validValues[Math.floor(Math.random() * (max - min + 1) + min)];
+};
+
+const generateRandomGenotypeDistinctValueFromValuesFromRule = (
+  genSchema: GenotypeDistinctValuesFromRuleSchema,
+  individualGens: { genotypeSchema: GenotypeSchemas, gen: number }[][]
+): number => {
+  const ruleValues = genSchema.rule(individualGens);
+
+  const exceptGens = individualGens
+    .reduce((prev, current) => prev.concat(current), [])
+    .filter(g => g.genotypeSchema.type === Searchspace.DistinctValuesFromRule
+      && (g.genotypeSchema as GenotypeDistinctValuesSchema).name === genSchema.name)
+    .reduce((prev, current) => {
+      prev.add(current.gen);
+      return prev;
+    }, new Set());
+
+  const validValues = ruleValues.filter(v => !exceptGens.has(v));
 
   const min = 0;
   const max = validValues.length - 1;

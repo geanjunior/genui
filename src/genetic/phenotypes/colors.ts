@@ -1,6 +1,8 @@
 import { DnaSequence } from "..";
 
 const colorPalettePhenotype: string[][] = [
+  ["black", "gray"],
+
   ["#A7C5C5", "#DEE0D5", "#E2AC48", "#B96028", "#983C2D"],
   ["#00747C", "#00BBC9", "#CACACA", "#878787", "#202022"],
   ["#F2F2F2", "#D9D9D9", "#A6A6A6", "#8C8C8C", "#737373"],

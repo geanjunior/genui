@@ -1,7 +1,4 @@
-import { Searchspace, typographyGenotypeSchema } from ".."
-import { colorPalettePhenotype } from "../..";
-
-const colors = Object.keys(colorPalettePhenotype[0]).map(k => parseInt(k)).filter(k => !isNaN(k));
+import { Searchspace, getColorsRule, typographyGenotypeSchema } from ".."
 
 const headerGenotypeSchema = [
   { type: Searchspace.Range, from: 0, to: 30 }, //margin-top
@@ -11,7 +8,7 @@ const headerGenotypeSchema = [
   { type: Searchspace.Range, from: 0, to: 9 }, //font-weight
   { type: Searchspace.Range, from: 0, to: typographyGenotypeSchema.length - 1 }, //font-family
 
-  { type: Searchspace.Values, values: colors }, //border-color
+  { type: Searchspace.ValuesFromRule, rule: getColorsRule }, //color
 ]
 
 export {

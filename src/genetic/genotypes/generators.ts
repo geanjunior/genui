@@ -1,4 +1,35 @@
-import { DnaSequence, GenotypeDistinctValuesFromRuleSchema, GenotypeDistinctValuesSchema, GenotypeRangeSchema, GenotypeSchemas, GenotypeValuesFromRuleSchema, GenotypeValuesSchema, Searchspace, genotypeSequenceMap } from ".";
+import {
+  GenotypeDistinctValuesFromRuleSchema,
+  GenotypeDistinctValuesSchema,
+  GenotypeRangeSchema,
+  GenotypeSchemas,
+  GenotypeValuesFromRuleSchema,
+  GenotypeValuesSchema,
+  Searchspace,
+  mountButtonGenotypeSchema,
+  mountColorPaletteSchema,
+  mountHeaderGenotypeSchema,
+  mountLayoutPaletteSchema,
+  mountTypographyGenotypeSchema
+} from "..";
+
+enum DnaSequence {
+  ColorPalette,
+  Typography,
+  Layout,
+  Header,
+  Button
+}
+
+const genotypeSequenceMap = ((): GenotypeSchemas[][] => {
+  const map = [];
+  map[DnaSequence.ColorPalette] = mountColorPaletteSchema();
+  map[DnaSequence.Typography] = mountTypographyGenotypeSchema();
+  map[DnaSequence.Layout] = mountLayoutPaletteSchema();
+  map[DnaSequence.Header] = mountHeaderGenotypeSchema();
+  map[DnaSequence.Button] = mountButtonGenotypeSchema();
+  return map;
+})();
 
 const genotypeSchema = Object
   .values(DnaSequence)
@@ -104,6 +135,8 @@ const generateRandomGenotypeDistinctValueFromValuesFromRule = (
 };
 
 export {
+  DnaSequence,
+  genotypeSequenceMap,
   genotypeSchema,
   generateRandomIndividual
 }

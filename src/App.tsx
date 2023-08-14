@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo } from "react";
-import { DnaSequence, generateRandomIndividual, useRandomDesignSystemDna } from "./genetic";
-import { UIColorPalette, GenButton, GenHeader } from "./genetic/components";
+import { DnaSequence, GenButton, GenHeader, GenLayout, UIColorPalette, generateRandomIndividual, useRandomDesignSystemDna } from "./genetic";
 
 import "./App.css"
 
@@ -16,6 +15,7 @@ function App() {
 
   useEffect(() => {
     if (!designSystemDna) return;
+    console.clear();
     console.log('designSystemDna.genotypes: ', JSON.stringify(designSystemDna?.genotypes));
     console.log('designSystemDna.phenotypes: ', JSON.stringify(designSystemDna?.phenotypes, undefined, 2));
   }, [designSystemDna]);
@@ -25,21 +25,20 @@ function App() {
   }, [setDesignSystemDna]);
 
   return (
-    <>
-      <h1 style={{ display: "inline-block", paddingRight: "10px" }}>Wellcome to Genetic UI </h1>
+    <GenLayout>
       <button
         onClick={onClickCallback}
-        style={{ textDecoration: 'underline', border: 'none', background: 'none', cursor: 'pointer' }}>&#x27F3;</button>
+        style={{ cursor: 'pointer', position: "absolute", top: "10px", right: "10px" }}
+      >&#x27F3;</button>
+
+      <GenHeader>Wellcome to Genetic UI</GenHeader>
       <section>
         <UIColorPalette colors={colorPalette}></UIColorPalette>
       </section>
       <section>
-        <GenHeader>Page Title</GenHeader>
-      </section>
-      <section>
         <GenButton>Button</GenButton>
       </section>
-    </>
+    </GenLayout>
   )
 }
 

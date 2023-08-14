@@ -21,14 +21,14 @@ const UIColorPalette = ({ colors }: UIColorPaletteProps) => {
     cursor: "pointer",
   };
 
-  return <>
+  return <div style={{ display: "inline-block", border: "3px solid #FFFFFF", height: `${size}px`, overflow: "hidden" }}>
     {colors.map((color) =>
       <div
         key={color}
         onClick={() => clickHandler(color)}
         style={{ ...boxStyle, backgroundColor: color }}
       >{color}</div>)}
-  </>
+  </div>
 }
 
 export type { UIColorPaletteProps }

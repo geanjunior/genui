@@ -1,11 +1,10 @@
-import { Searchspace } from "..";
-import { typographyPhenotype } from "../..";
+import { Searchspace, typographyPhenotype } from "..";
 
-const typographyGenotypeSchema = [
+const mountTypographyGenotypeSchema = () => [
   { type: Searchspace.Values, values: [...Array(typographyPhenotype.length).keys()] },
   { type: Searchspace.Values, values: [...Array(typographyPhenotype.length).keys()] }
 ];
 
 export {
-  typographyGenotypeSchema
+  mountTypographyGenotypeSchema
 }

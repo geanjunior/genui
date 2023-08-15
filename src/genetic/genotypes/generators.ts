@@ -87,8 +87,7 @@ const generateRandomGenotypeDistinctValueFromValues = (
 
   const exceptGens = individualGens
     .reduce((prev, current) => prev.concat(current), [])
-    .filter(g => g.genotypeSchema.type === Searchspace.DistinctValues
-      && (g.genotypeSchema as GenotypeDistinctValuesSchema).name === genSchema.name)
+    .filter(g => g.genotypeSchema.name && genSchema.exclude.includes(g.genotypeSchema.name))
     .reduce((prev, current) => {
       prev.add(current.gen);
       return prev;
@@ -120,8 +119,7 @@ const generateRandomGenotypeDistinctValueFromValuesFromRule = (
 
   const exceptGens = individualGens
     .reduce((prev, current) => prev.concat(current), [])
-    .filter(g => g.genotypeSchema.type === Searchspace.DistinctValuesFromRule
-      && (g.genotypeSchema as GenotypeDistinctValuesSchema).name === genSchema.name)
+    .filter(g => g.genotypeSchema.name && genSchema.exclude.includes(g.genotypeSchema.name))
     .reduce((prev, current) => {
       prev.add(current.gen);
       return prev;

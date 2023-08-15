@@ -1,22 +1,22 @@
 import { DnaSequence, colorPalettePhenotype } from "..";
 
-type GenotypeBaseSchema = { type: string };
+type GenotypeBaseSchema = { type: string, name?: string };
+
+type GenotypeDistinctBaseSchema = GenotypeBaseSchema & {
+  exclude: string[]
+};
 
 type GenotypeValuesSchema = GenotypeBaseSchema & {
   values: number[]
 };
 
-type GenotypeDistinctValuesSchema = GenotypeValuesSchema & {
-  name: string
-};
+type GenotypeDistinctValuesSchema = GenotypeValuesSchema & GenotypeDistinctBaseSchema;
 
 type GenotypeValuesFromRuleSchema = GenotypeBaseSchema & {
   rule: (individualGens: { genotypeSchema: GenotypeSchemas; gen: number; }[][]) => number[]
 };
 
-type GenotypeDistinctValuesFromRuleSchema = GenotypeValuesFromRuleSchema & {
-  name: string
-};
+type GenotypeDistinctValuesFromRuleSchema = GenotypeValuesFromRuleSchema & GenotypeDistinctBaseSchema;
 
 
 type GenotypeRangeSchema = GenotypeBaseSchema & {

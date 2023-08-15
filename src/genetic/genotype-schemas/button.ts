@@ -11,9 +11,15 @@ const mountButtonGenotypeSchema = () => [
   { type: Searchspace.Range, from: 0, to: 9 }, //font-weight
   { type: Searchspace.Range, from: 0, to: mountTypographyGenotypeSchema.length - 1 }, //font-family
 
-  { type: Searchspace.DistinctValuesFromRule, name: "button.colors", rule: getColorsRule }, //color
+  {
+    type: Searchspace.DistinctValuesFromRule, rule: getColorsRule,
+    name: "button.colors", exclude: ["button.background-color"]
+  }, //color
   { type: Searchspace.ValuesFromRule, rule: getColorsRule }, //border-color
-  { type: Searchspace.DistinctValuesFromRule, name: "button.colors", rule: getColorsRule }, //background-color
+  {
+    type: Searchspace.DistinctValuesFromRule, rule: getColorsRule,
+    name: "button.background-color", exclude: ["button.colors", "layout.background-color"]
+  }, //background-color
 ];
 
 export { mountButtonGenotypeSchema }

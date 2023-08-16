@@ -1,4 +1,4 @@
-import { DnaSequence, calculateContrastRatio, colorPalettePhenotype } from "..";
+import { DnaSequence, calculateColorsContrastRatio, colorPalettePhenotype } from "..";
 
 type IndividualSchemaAndGen = {
   genotypeSchema: GenotypeSchemas;
@@ -53,7 +53,7 @@ const getContraingColorsRule = (individualGens: IndividualSchemaAndGen[][], valu
   const contrastRatioMap = valueGens.map(valueGen => excludedGens.map(excludedGen => {
     const colorValue = colors[valueGen];
     const colorExcluded = colors[excludedGen];
-    const contrastRatio = calculateContrastRatio(colorValue, colorExcluded);
+    const contrastRatio = calculateColorsContrastRatio(colorValue, colorExcluded);
     return contrastRatio;
   }));
   const filteredValues = valueGens.filter((_, index) => !contrastRatioMap[index].some(contrastRatio => contrastRatio >= 1 / 3));

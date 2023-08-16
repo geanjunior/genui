@@ -5,6 +5,7 @@ import {
   GenotypeSchemas,
   GenotypeValuesFromRuleSchema,
   GenotypeValuesSchema,
+  IndividualSchemaAndGen,
   Searchspace,
   mountButtonGenotypeSchema,
   mountColorPaletteSchema,
@@ -37,9 +38,9 @@ const genotypeSchema = Object
   .map(i => (genotypeSequenceMap[i as DnaSequence] || null));
 
 const generateRandomIndividual = () => {
-  const individualGens: { genotypeSchema: GenotypeSchemas, gen: number }[][] = [];
+  const individualGens: IndividualSchemaAndGen[][] = [];
   genotypeSchema.forEach(elementSchema => {
-    const elementGens: { genotypeSchema: GenotypeSchemas, gen: number }[] = [];
+    const elementGens: IndividualSchemaAndGen[] = [];
     individualGens.push(elementGens);
     if (elementSchema) {
       elementSchema.forEach(genotypeSchema => {
@@ -52,7 +53,7 @@ const generateRandomIndividual = () => {
 
 const generateRandomGenotypeValue = (
   genSchema: GenotypeSchemas,
-  individualGens: { genotypeSchema: GenotypeSchemas, gen: number }[][]
+  individualGens: IndividualSchemaAndGen[][]
 ): number => {
 
   if (genSchema.type === Searchspace.Range)
@@ -82,7 +83,7 @@ const generateRandomGenotypeValueFromValues = (genSchema: GenotypeValuesSchema):
 
 const generateRandomGenotypeDistinctValueFromValues = (
   genSchema: GenotypeDistinctValuesSchema,
-  individualGens: { genotypeSchema: GenotypeSchemas, gen: number }[][]
+  individualGens: IndividualSchemaAndGen[][]
 ): number => {
 
   const exceptGens = individualGens
@@ -102,7 +103,7 @@ const generateRandomGenotypeDistinctValueFromValues = (
 
 const generateRandomGenotypeValueFromValuesFromRule = (
   genSchema: GenotypeValuesFromRuleSchema,
-  individualGens: { genotypeSchema: GenotypeSchemas, gen: number }[][]
+  individualGens: IndividualSchemaAndGen[][]
 ): number => {
   const validValues = genSchema.rule(individualGens);
 
@@ -113,7 +114,7 @@ const generateRandomGenotypeValueFromValuesFromRule = (
 
 const generateRandomGenotypeDistinctValueFromValuesFromRule = (
   genSchema: GenotypeDistinctValuesFromRuleSchema,
-  individualGens: { genotypeSchema: GenotypeSchemas, gen: number }[][]
+  individualGens: IndividualSchemaAndGen[][]
 ): number => {
   const ruleValues = genSchema.rule(individualGens);
 
@@ -123,9 +124,12 @@ const generateRandomGenotypeDistinctValueFromValuesFromRule = (
     .reduce((prev, current) => {
       prev.add(current.gen);
       return prev;
-    }, new Set());
+    }, new Set<number>());
 
-  const validValues = ruleValues.filter(v => !exceptGens.has(v));
+  let validValues = ruleValues.filter(v => !exceptGens.has(v));
+  if (genSchema.distinctRule) {
+    validValues = genSchema.distinctRule(individualGens, Array.from(validValues), Array.from(exceptGens));
+  }
 
   const min = 0;
   const max = validValues.length - 1;

@@ -1,4 +1,9 @@
-import { DnaSequence, colorPalettePhenotype } from "..";
+import { DnaSequence, calculateContrastRatio, colorPalettePhenotype } from "..";
+
+type IndividualSchemaAndGen = {
+  genotypeSchema: GenotypeSchemas;
+  gen: number;
+}
 
 type GenotypeBaseSchema = { type: string, name?: string };
 
@@ -13,10 +18,12 @@ type GenotypeValuesSchema = GenotypeBaseSchema & {
 type GenotypeDistinctValuesSchema = GenotypeValuesSchema & GenotypeDistinctBaseSchema;
 
 type GenotypeValuesFromRuleSchema = GenotypeBaseSchema & {
-  rule: (individualGens: { genotypeSchema: GenotypeSchemas; gen: number; }[][]) => number[]
+  rule: (individualGens: IndividualSchemaAndGen[][]) => number[]
 };
 
-type GenotypeDistinctValuesFromRuleSchema = GenotypeValuesFromRuleSchema & GenotypeDistinctBaseSchema;
+type GenotypeDistinctValuesFromRuleSchema = GenotypeValuesFromRuleSchema & GenotypeDistinctBaseSchema & {
+  distinctRule?: (individualGens: IndividualSchemaAndGen[][], valueGens: number[], excludedGens: number[]) => number[]
+};
 
 
 type GenotypeRangeSchema = GenotypeBaseSchema & {
@@ -34,12 +41,34 @@ enum Searchspace {
   Range = "range"
 }
 
-const getColorsRule = (individualGens: { genotypeSchema: GenotypeSchemas; gen: number; }[][]) => {
-  const values = colorPalettePhenotype[individualGens[DnaSequence.ColorPalette][0].gen];
-  return Object.keys(values).map(k => parseInt(k)).filter(k => !isNaN(k))
+const getColorsRule = (individualGens: IndividualSchemaAndGen[][]) => {
+  const colors = colorPalettePhenotype[individualGens[DnaSequence.ColorPalette][0].gen];
+  const values = Object.keys(colors).map(k => parseInt(k)).filter(k => !isNaN(k));
+  return values;
+};
+
+const getContraingColorsRule = (individualGens: IndividualSchemaAndGen[][], valueGens: number[], excludedGens: number[]) => {
+  const colors = colorPalettePhenotype[individualGens[DnaSequence.ColorPalette][0].gen];
+
+  const contrastRatioMap = valueGens.map(valueGen => excludedGens.map(excludedGen => {
+    const colorValue = colors[valueGen];
+    const colorExcluded = colors[excludedGen];
+    const contrastRatio = calculateContrastRatio(colorValue, colorExcluded);
+    return contrastRatio;
+  }));
+  const filteredValues = valueGens.filter((_, index) => !contrastRatioMap[index].some(contrastRatio => contrastRatio >= 1 / 3));
+
+  return filteredValues.length
+    ? filteredValues
+    : (() => {
+      const arr = valueGens.map((_, index) => Math.max.apply(null, contrastRatioMap[index]));
+      const min = Math.min.apply(null, arr);
+      return [valueGens[arr.indexOf(min)]];
+    })();
 };
 
 export type {
+  IndividualSchemaAndGen,
   GenotypeValuesSchema,
   GenotypeDistinctValuesSchema,
   GenotypeValuesFromRuleSchema,
@@ -50,5 +79,6 @@ export type {
 
 export {
   Searchspace,
-  getColorsRule
+  getColorsRule,
+  getContraingColorsRule
 }

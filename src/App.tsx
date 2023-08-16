@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useMemo } from "react";
-import { DnaSequence, GenButton, GenHeader, GenLayout, UIColorPalette, generateRandomIndividual, useRandomDesignSystemDna } from "./genetic";
+import { DnaSequence, GenButton, GenHeader, GenLayout, UIColorPalette, generateRandomIndividual, useDesignSystemDna } from "./genetic";
 
 import "./App.css"
 
 function App() {
-  const [designSystemDna, setDesignSystemDna] = useRandomDesignSystemDna();
+  const [designSystemDna, setDesignSystemDna] = useDesignSystemDna();
 
   const colorPalette: string[] = useMemo(() => {
     if (designSystemDna) {
@@ -14,11 +14,14 @@ function App() {
   }, [designSystemDna]);
 
   useEffect(() => {
-    if (!designSystemDna) return;
+    if (!designSystemDna) {
+      setDesignSystemDna(generateRandomIndividual());
+      return;
+    }
     console.clear();
     console.log('designSystemDna.genotypes: ', JSON.stringify(designSystemDna?.genotypes));
     console.log('designSystemDna.phenotypes: ', JSON.stringify(designSystemDna?.phenotypes, undefined, 2));
-  }, [designSystemDna]);
+  }, [designSystemDna, setDesignSystemDna]);
 
   const onClickCallback = useCallback(() => {
     setDesignSystemDna(generateRandomIndividual());

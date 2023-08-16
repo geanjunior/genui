@@ -1,4 +1,4 @@
-import { Searchspace, getColorsRule, mountTypographyGenotypeSchema } from ".."
+import { Searchspace, getColorsRule, getContraingColorsRule, mountTypographyGenotypeSchema } from ".."
 
 const mountHeaderGenotypeSchema = () => [
   { type: Searchspace.Range, from: 0, to: 30 }, //margin-top
@@ -9,8 +9,8 @@ const mountHeaderGenotypeSchema = () => [
   { type: Searchspace.Range, from: 0, to: mountTypographyGenotypeSchema.length - 1 }, //font-family
 
   {
-    type: Searchspace.DistinctValuesFromRule, rule: getColorsRule,
-    name: "header.color", exclude: ["layout.background-color"]
+    name: "header.color", type: Searchspace.DistinctValuesFromRule,
+    rule: getColorsRule, distinctRule: getContraingColorsRule, exclude: ["layout.background-color"]
   }, //color
 ]
 

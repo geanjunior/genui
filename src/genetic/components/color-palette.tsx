@@ -26,7 +26,7 @@ const UIColorPalette = ({ colors }: UIColorPaletteProps) => {
     width: `${size}px`,
     height: `${size}px`,
     textAlign: "center",
-    lineHeight: `${size - 32}px`,
+    lineHeight: `${size - 25}px`,
     cursor: "pointer",
     fontFamily: "sans-serif",
     fontWeight: "700",
@@ -34,7 +34,7 @@ const UIColorPalette = ({ colors }: UIColorPaletteProps) => {
     textShadow: "0 25px #525252",
   };
 
-  return <div style={{ display: "inline-block", border: "3px solid #FFFFFF", height: `${size}px`, overflow: "hidden" }}>
+  return <div style={{ display: "inline-block", border: "2px solid #C2C2C2", boxShadow: "0 0 3px #565656", borderRadius: "5px", height: `${size + 6}px`, overflow: "hidden" }}>
     {colors.map((color) =>
       <div
         key={color}

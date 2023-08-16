@@ -2,7 +2,6 @@ import { useCallback, useContext, useEffect } from "react";
 import {
   GeneticContext,
   Dna,
-  generateRandomIndividual,
   parsePhenotypes
 } from ".";
 
@@ -29,12 +28,7 @@ const useDesignSystemDna = (defaultGenotypes?: number[][]) : [
   return [designSystemDna, _setDesignSystemDna];
 }
 
-const useRandomDesignSystemDna = () => {
-  return useDesignSystemDna(generateRandomIndividual());
-};
-
 export {
-  useDesignSystemDna,
-  useRandomDesignSystemDna,
+  useDesignSystemDna
 };
 

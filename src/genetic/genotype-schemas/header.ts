@@ -6,7 +6,7 @@ const mountHeaderGenotypeSchema = () => [
 
   { type: Searchspace.Range, from: 30, to: 80 }, //font-size
   { type: Searchspace.Range, from: 0, to: 9 }, //font-weight
-  { type: Searchspace.Range, from: 0, to: mountTypographyGenotypeSchema.length - 1 }, //font-family
+  { type: Searchspace.Range, from: 0, to: mountTypographyGenotypeSchema().length - 1 }, //font-family
 
   {
     name: "header.color", type: Searchspace.DistinctValuesFromRule,

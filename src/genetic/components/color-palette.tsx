@@ -6,7 +6,7 @@ interface UIColorPaletteProps {
 
 const UIColorPalette = ({ colors }: UIColorPaletteProps) => {
   const [isMouseOver, setIsMouseOver] = useState("");
-  const [size] = useState(80);
+  const [size] = useState(30);
 
   const clickHandler = (color: string) => {
     navigator.clipboard.writeText(color);

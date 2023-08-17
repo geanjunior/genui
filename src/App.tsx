@@ -16,6 +16,7 @@ function App() {
   useEffect(() => {
     if (!designSystemDna) {
       setDesignSystemDna(generateRandomIndividual());
+      setInterval(() => setDesignSystemDna(generateRandomIndividual()), 5000)
       return;
     }
     console.clear();

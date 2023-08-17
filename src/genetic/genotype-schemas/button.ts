@@ -9,7 +9,7 @@ const mountButtonGenotypeSchema = () => [
 
   { type: Searchspace.Range, from: 13, to: 30 }, //font-size
   { type: Searchspace.Range, from: 0, to: 9 }, //font-weight
-  { type: Searchspace.Range, from: 0, to: mountTypographyGenotypeSchema.length - 1 }, //font-family
+  { type: Searchspace.Range, from: 0, to: mountTypographyGenotypeSchema().length - 1 }, //font-family
 
   {
     name: "button.colors", type: Searchspace.DistinctValuesFromRule,

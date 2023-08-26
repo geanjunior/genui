@@ -29,25 +29,25 @@ function App() {
   }, [setDesignSystemDna]);
 
   return (
-    <GenLayout>
-      <button
-        onClick={onClickCallback}
-        style={{ cursor: 'pointer', position: "absolute", top: "10px", right: "10px" }}
-      >&#x27F3;</button>
-
-      <GenHeader>Wellcome to Genetic UI</GenHeader>
-      <section>
-        <GenParagraph>
-          GeneticUI is a cutting-edge React library that introduces genetic algorithms to UI design. By harnessing real-time interactivity, users can modify design variables like colors and spacing, prompting the genetic algorithm to evolve UI components accordingly. This innovative approach leads to a collaborative and ever-changing UI experience, reflecting the dynamic nature of genetic evolution.
-        </GenParagraph>
+    <>
+      <section style={{ display: "block", height: "43px", right: 0, padding: "10px", backgroundColor: "#2C3C3C" }}>
+        <div style={{ float: "right", margin: "10px" }}>
+          <button onClick={onClickCallback} style={{ cursor: 'pointer' }}>&#x27F3;</button>
+        </div>
+        <div style={{ float: "right" }}>
+          <UIColorPalette colors={colorPalette}></UIColorPalette>
+        </div>
       </section>
-      <section>
-        <UIColorPalette colors={colorPalette}></UIColorPalette>
+      <section style={{ position: "absolute", top: "63px", bottom: 0, right: 0, left: 0 }}>
+        <GenLayout>
+          <GenHeader>Wellcome to Genetic UI</GenHeader>
+          <GenParagraph>
+            GeneticUI is a cutting-edge React library that introduces genetic algorithms to UI design. By harnessing real-time interactivity, users can modify design variables like colors and spacing, prompting the genetic algorithm to evolve UI components accordingly. This innovative approach leads to a collaborative and ever-changing UI experience, reflecting the dynamic nature of genetic evolution.
+          </GenParagraph>
+          <GenButton>Button</GenButton>
+        </GenLayout>
       </section>
-      <section>
-        <GenButton>Button</GenButton>
-      </section>
-    </GenLayout>
+    </>
   )
 }
 

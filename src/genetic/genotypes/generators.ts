@@ -11,6 +11,7 @@ import {
   mountColorPaletteSchema,
   mountHeaderGenotypeSchema,
   mountLayoutPaletteSchema,
+  mountParagraphGenotypeSchema,
   mountTypographyGenotypeSchema
 } from "..";
 
@@ -19,6 +20,7 @@ enum DnaSequence {
   Typography,
   Layout,
   Header,
+  Paragraph,
   Button
 }
 
@@ -28,6 +30,7 @@ const genotypeSequenceMap = ((): GenotypeSchemas[][] => {
   map[DnaSequence.Typography] = mountTypographyGenotypeSchema();
   map[DnaSequence.Layout] = mountLayoutPaletteSchema();
   map[DnaSequence.Header] = mountHeaderGenotypeSchema();
+  map[DnaSequence.Paragraph] = mountParagraphGenotypeSchema();
   map[DnaSequence.Button] = mountButtonGenotypeSchema();
   return map;
 })();

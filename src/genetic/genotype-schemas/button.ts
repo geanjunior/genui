@@ -1,4 +1,4 @@
-import { Searchspace, mountTypographyGenotypeSchema, getColorsRule, getContraingColorsRule } from "..";
+import { Searchspace, mountTypographyGenotypeSchema, getColorsRule, getContrastingColorsRule } from "..";
 
 const mountButtonGenotypeSchema = () => [
   { type: Searchspace.Range, from: 0, to: 4 }, //border-width
@@ -18,7 +18,7 @@ const mountButtonGenotypeSchema = () => [
   { type: Searchspace.ValuesFromRule, rule: getColorsRule }, //border-color
   {
     name: "button.background-color", type: Searchspace.DistinctValuesFromRule,
-    rule: getColorsRule, distinctRule: getContraingColorsRule, exclude: ["button.colors"]
+    rule: getColorsRule, distinctRule: getContrastingColorsRule, exclude: ["button.colors"]
   }, //background-color
 ];
 

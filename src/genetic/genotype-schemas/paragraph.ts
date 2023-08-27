@@ -1,4 +1,4 @@
-import { Searchspace, getColorsRule, getContraingColorsRule, mountTypographyGenotypeSchema } from ".."
+import { Searchspace, getColorsRule, getContrastingColorsRule, mountTypographyGenotypeSchema, textAlignPhenotype } from ".."
 
 const mountParagraphGenotypeSchema = () => [
   { type: Searchspace.Range, from: 0, to: 30 }, //margin-top
@@ -10,11 +10,17 @@ const mountParagraphGenotypeSchema = () => [
   { type: Searchspace.Range, from: 0, to: 40 }, //line-height
   { type: Searchspace.Range, from: 0, to: 2 }, //letter-spacing
   { type: Searchspace.Range, from: 0, to: 10 }, //word-spacing
-  { type: Searchspace.Range, from: 0, to: 6 }, //text-align
-
+  { type: Searchspace.Values, values: [0, 70, 70 * 2] }, //text-indent
+  {
+    type: Searchspace.Values,
+    values: textAlignPhenotype.map((_, i) => i).filter(i => ![
+      textAlignPhenotype.indexOf("end"),
+      textAlignPhenotype.indexOf("right")
+    ].includes(i))
+  }, //text-align
   {
     name: "paragraph.color", type: Searchspace.DistinctValuesFromRule,
-    rule: getColorsRule, distinctRule: getContraingColorsRule, exclude: ["layout.background-color"]
+    rule: getColorsRule, distinctRule: getContrastingColorsRule, exclude: ["layout.background-color"]
   }, //color
 ]
 

@@ -47,7 +47,7 @@ const getColorsRule = (individualGens: IndividualSchemaAndGen[][]) => {
   return values;
 };
 
-const getContraingColorsRule = (individualGens: IndividualSchemaAndGen[][], valueGens: number[], excludedGens: number[]) => {
+const getContrastingColorsRule = (individualGens: IndividualSchemaAndGen[][], valueGens: number[], excludedGens: number[]) => {
   const colors = colorPalettePhenotype[individualGens[DnaSequence.ColorPalette][0].gen];
 
   const contrastRatioMap = valueGens.map(valueGen => excludedGens.map(excludedGen => {
@@ -80,5 +80,5 @@ export type {
 export {
   Searchspace,
   getColorsRule,
-  getContraingColorsRule
+  getContrastingColorsRule
 }

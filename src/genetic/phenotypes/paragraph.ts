@@ -1,6 +1,8 @@
 import { DnaSequence, Phenotype, TextBasedPhenotype, textAlignPhenotype } from "..";
 
-interface GenParagraphPhenotype extends TextBasedPhenotype { }
+interface GenParagraphPhenotype extends TextBasedPhenotype {
+  textIndent?: string,
+}
 
 const parseToParagraphPhenotype = (
   genotypes: number[][],
@@ -26,6 +28,7 @@ const parseToParagraphPhenotype = (
     lineHeight: `${fontSize + paragraphGens[++i]}px`,
     letterSpacing: `${paragraphGens[++i]}px`,
     wordSpacing: `${paragraphGens[++i]}px`,
+    textIndent: paragraphGens[++i] ? `${paragraphGens[i]}px` : undefined,
     textAlign: textAlignPhenotype[paragraphGens[++i]],
 
     //colors

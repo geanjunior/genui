@@ -1,5 +1,7 @@
 import { DnaSequence } from "..";
 
+//TODO: https://palett.es/API/v1/palette?_=1
+
 const colorPalettePhenotype: string[][] = [
   ["#ed1c16", "#ffffff"],
   ["#f65a5b", "#204056"],
@@ -30,7 +32,7 @@ const colorPalettePhenotype: string[][] = [
   ["#262626", "#acbfa4", "#e2e8ce"],
   ["#ada8b6", "#ffeedb", "#4c3b4d"],
   ["#485696", "#e7e7e7", "#f9c784"],
-  ["#08415c", "#cc2936", "#6b818c"],
+  ["#08415c", "#cc2936", "#bcc6cc"],
 
   ["#eb0a1e", "#ffffff", "#000000", "#58595b"],
 
@@ -38,7 +40,6 @@ const colorPalettePhenotype: string[][] = [
   ["#A6785D", "#594032", "#D9A384", "#F2F2F2", "#0D0D0D"],
   ["#0742F2", "#527AF2", "#9BB8F2", "#BBCDF2", "#1A2126"],
   ["#F2BB13", "#F28D35", "#F2F2F2", "#BFBFBF", "#0D0D0D"],
-  ["#04D9D9", "#5FD9D9", "#94F2F2", "#B6F2F2", "#F2F2F2"],
   ["#80838C", "#012619", "#BF9F78", "#F2F2F2", "#0D0D0D"],
   ["#140DD9", "#1FBF92", "#F2E49B", "#F27777", "#0D0D0D"],
   ["#18D935", "#15BF2F", "#2DA63F", "#D9D9D9", "#0D0D0D"],

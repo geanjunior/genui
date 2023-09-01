@@ -5,6 +5,7 @@ import {
   parseToHeaderPhenotype,
   parseToLayoutPhenotype,
   parseToParagraphPhenotype,
+  parseToTextInputPhenotype,
   parseToTypographyPhenotype
 } from ".";
 
@@ -26,6 +27,7 @@ const parsePhenotypes = (genotypes: number[][]) => {
     map[DnaSequence.Header] = parseToHeaderPhenotype(genotypes, map);
     map[DnaSequence.Paragraph] = parseToParagraphPhenotype(genotypes, map);
     map[DnaSequence.Button] = parseToButtonPhenotype(genotypes, map);
+    map[DnaSequence.TextInput] = parseToTextInputPhenotype(genotypes, map);
     return map;
   })();
 

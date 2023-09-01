@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { DnaSequence, GenButton, GenHeader, GenLayout, GenParagraph, UIColorPalette, generateRandomIndividual, useDesignSystemDna } from "./genetic";
+import { DnaSequence, GenButton, GenHeader, GenLayout, GenParagraph, GenTextInput, UIColorPalette, generateRandomIndividual, useDesignSystemDna } from "./genetic";
 
 import "./App.css"
 
@@ -63,6 +63,10 @@ function App() {
           <GenParagraph>
             GeneticUI is a cutting-edge React library that introduces genetic algorithms to UI design. By harnessing real-time interactivity, users can modify design variables like colors and spacing, prompting the genetic algorithm to evolve UI components accordingly. This innovative approach leads to a collaborative and ever-changing UI experience, reflecting the dynamic nature of genetic evolution.
           </GenParagraph>
+          <GenTextInput value={'Some Text'}
+            onChange={(evt: React.ChangeEvent) => console.log(evt.target.getAttribute('value') || evt.target.textContent)}
+            style={{width: "500px"}} />
+          <br /><br />
           <GenButton onClick={() => setTimeout(() => alert("Button was clicked!"), 0)}>Button</GenButton>
         </GenLayout>
       </section>

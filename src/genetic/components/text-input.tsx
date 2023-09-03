@@ -1,65 +1,70 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { GenTextInputPhenotype, DnaSequence, useDesignSystemDna, GenTextInputStylePhenotype } from "..";
+import React from "react";
+
+type GenTextInputElement = (HTMLElement | HTMLInputElement | HTMLTextAreaElement) & {
+  value: string | number | readonly string[] | undefined
+};
 
 interface GenTextInputProps extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLElement>, HTMLElement> {
-
+  rows?: number
+  ref?: React.RefObject<GenTextInputElement>
 }
 
-const GenTextInput = ({ style, value, onChange, ...props }: GenTextInputProps) => {
+const GenTextInput = React.forwardRef(({ style, value, rows, onChange, ...props }: GenTextInputProps, ref) => {
   const [designSystemDna] = useDesignSystemDna();
   const [stylePhen, setStylePhen] = useState<React.CSSProperties | GenTextInputStylePhenotype>();
-  const [rows, setRows] = useState<number>(1);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const texareaRef = useRef<HTMLTextAreaElement>(null);
+  const [_rows, setRows] = useState<number>(rows || 1);
   const [_value, setValue] = useState<string | number | readonly string[] | undefined>(value || '');
-  const [chageInputEvent, setChangeInputEvent] = useState<React.ChangeEvent<HTMLInputElement>>();
-  const [chageTextAreaEvent, setChangeTextAreaEvent] = useState<React.ChangeEvent<HTMLTextAreaElement>>();
+
+  const [changeEvent, setChangeEvent] = useState<React.ChangeEvent<GenTextInputElement>>();
+
+  const changeCallback = useCallback((evt: React.ChangeEvent<GenTextInputElement>) => {
+    setChangeEvent(evt);
+    setValue(evt.target.value);
+  }, []);
 
   useEffect(() => {
     if (designSystemDna) {
       const phenotype = designSystemDna.phenotypes[DnaSequence.TextInput] as GenTextInputPhenotype;
-      setRows(phenotype.rows);
+      setRows(rows || phenotype.rows);
       setStylePhen({
         ...phenotype.style,
         ...style
       });
     }
-  }, [style, designSystemDna]);
-
-  const changeInputCallback = useCallback((evt: React.ChangeEvent<HTMLInputElement>) => {
-    setChangeInputEvent(evt);
-    setValue(evt.target.value);
-  }, []);
-
-  const changeTextAreaCallback = useCallback((evt: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setChangeTextAreaEvent(evt);
-    setValue(evt.target.value);
-  }, []);
+  }, [style, designSystemDna, rows]);
 
   useEffect(() => {
-    if (chageInputEvent && _value == chageInputEvent.target.value) {
-      (onChange as React.ChangeEventHandler<HTMLInputElement>)?.(chageInputEvent);
-      setChangeInputEvent(undefined);
+    const targetValue = (changeEvent?.target.getAttribute("value") || changeEvent?.target.textContent) as string;
+    if (changeEvent && _value == targetValue) {
+      onChange?.(changeEvent);
+      setChangeEvent(undefined);
     }
-    if (chageTextAreaEvent && _value == chageTextAreaEvent.target.value) {
-      (onChange as React.ChangeEventHandler<HTMLTextAreaElement>)?.(chageTextAreaEvent);
-      setChangeTextAreaEvent(undefined);
-    }
-  }, [_value, chageInputEvent, chageTextAreaEvent, onChange])
+  }, [_value, changeEvent, onChange])
 
   return <>
-    {(rows > 1)
-      ? <textarea ref={texareaRef} rows={rows} style={{ ...stylePhen }} value={_value} {
-        ...(props as React.DetailedHTMLProps<React.TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement>)
-      } onChange={changeTextAreaCallback} />
-      : <input ref={inputRef} type="text" style={{ ...stylePhen }} value={_value} {
-        ...(props as React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>)
-      } onChange={changeInputCallback} />}
+    {(_rows > 1)
+      ? <textarea
+        ref={ref as React.LegacyRef<HTMLTextAreaElement>}
+        rows={_rows}
+        style={{ ...stylePhen }}
+        value={_value} {...(props as React.DetailedHTMLProps<React.TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement>)}
+        onChange={changeCallback}
+      />
+      : <input
+        ref={ref as React.LegacyRef<HTMLInputElement>}
+        type="text"
+        style={{ ...stylePhen }}
+        value={_value} {...(props as React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>)}
+        onChange={changeCallback}
+      />}
   </>
-}
+});
 
 export { GenTextInput };
 
 export type {
+  GenTextInputElement,
   GenTextInputProps
 }

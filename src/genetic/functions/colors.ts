@@ -69,6 +69,8 @@ const doShadeColor = (hexColor: string, magnitude: number) => {
 
 export {
   rgbToHex,
+  hexToRgb,
   calculateColorsContrastRatio,
+  calculateColorLuminance,
   doShadeColor
 }

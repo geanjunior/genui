@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { GenHeaderPhenotype, DnaSequence, useDesignSystemDna } from "../../genetic";
+import { GenLabelPhenotype, DnaSequence, useDesignSystemDna } from "../../genetic";
 
 interface GenHeaderProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement> {
 
@@ -7,12 +7,12 @@ interface GenHeaderProps extends React.DetailedHTMLProps<React.HTMLAttributes<HT
 
 const GenHeader = ({ children, style, ...props }: GenHeaderProps) => {
   const [designSystemDna] = useDesignSystemDna();
-  const [stylePhen, setStylePhen] = useState<React.CSSProperties | GenHeaderPhenotype>();
+  const [stylePhen, setStylePhen] = useState<React.CSSProperties | GenLabelPhenotype>();
 
   useEffect(() => {
     if (designSystemDna) {
       setStylePhen({
-        ...(designSystemDna.phenotypes[DnaSequence.Header] as GenHeaderPhenotype),
+        ...(designSystemDna.phenotypes[DnaSequence.Header] as GenLabelPhenotype),
         ...style
       });
     }

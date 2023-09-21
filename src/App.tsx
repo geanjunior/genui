@@ -60,21 +60,17 @@ function App() {
       </section>
       <section style={{ position: "absolute", top: "63px", bottom: 0, right: 0, left: 0 }}>
         <GenLayout>
-          <GenHeader>Wellcome to Genetic UI</GenHeader>
           <GenParagraph>
             GeneticUI is a cutting-edge React library that introduces genetic algorithms to UI design. By harnessing real-time interactivity, users can modify design variables like colors and spacing, prompting the genetic algorithm to evolve UI components accordingly. This innovative approach leads to a collaborative and ever-changing UI experience, reflecting the dynamic nature of genetic evolution.
           </GenParagraph>
-          <GenTextInput value={'Put your text here...'} rows={1}
-            onChange={(evt: React.ChangeEvent<GenTextInputElement>) => {
-              console.log('evt', evt.target.value);
-            }}
-            style={{ width: "500px" }} />
+          <GenHeader>Wellcome to Genetic UI</GenHeader>
+          <GenTextInput id="test-label" label="Label" style={{ width: "500px" }} rows={1}
+            value={'Put your text here...'}
+            onChange={(evt: React.ChangeEvent<GenTextInputElement>) => { console.log(evt.target.value); }} />
           <br /><br />
-          <GenTextInput placeholder="Put your text here..."
-            onChange={(evt: React.ChangeEvent<GenTextInputElement>) => {
-              console.log(evt.target.value);
-            }}
-            style={{ width: "500px" }} />
+          <GenTextInput id="test-label2" label="Label" style={{ width: "500px" }}
+            placeholder="Put your text here..."
+            onChange={(evt: React.ChangeEvent<GenTextInputElement>) => { console.log(evt.target.value); }} />
           <br /><br />
           <GenButton onClick={() => setTimeout(() => alert("Button was clicked!"), 0)}>Button</GenButton>
         </GenLayout>

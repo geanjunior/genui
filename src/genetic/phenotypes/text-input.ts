@@ -18,7 +18,8 @@ interface GenTextInputStylePhenotype {
 
 interface GenTextInputPhenotype extends Phenotype {
   rows: number,
-  style: GenTextInputStylePhenotype
+  variation: number,
+  input: GenTextInputStylePhenotype
 }
 
 const parseToTextInputPhenotype = (
@@ -35,7 +36,8 @@ const parseToTextInputPhenotype = (
 
   return {
     rows: textInputGens[i++],
-    style: {
+    variation: textInputGens[i++],
+    input: {
       //border
       borderStyle: 'solid',
       borderWidth: `${textInputGens[i++]}px`,

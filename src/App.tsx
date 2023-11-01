@@ -66,7 +66,7 @@ function App() {
           <GenParagraph>
             GeneticUI is a cutting-edge React library that introduces genetic algorithms to UI design. By harnessing real-time interactivity, users can modify design variables like colors and spacing, prompting the genetic algorithm to evolve UI components accordingly. This innovative approach leads to a collaborative and ever-changing UI experience, reflecting the dynamic nature of genetic evolution.
           </GenParagraph>
-          <GenSelectInput id="selector" label="Choose" style={{ width: "500px" }}
+          <GenSelectInput id="selector" label="Choose" style={{ width: "100%" }}
             //placeholder="Choose one option..."
             onChange={(evt: React.ChangeEvent<GenSelectInputElement>) => { console.log(evt.target.value); }}>
             <GenSelectOption label="Option One" value={1} />
@@ -80,11 +80,11 @@ function App() {
             <GenSelectOption label="Option Nine" value={"nine"} />
           </GenSelectInput>
           <br /><br />
-          <GenTextInput id="test-label" label="Label" style={{ width: "500px" }} rows={1}
-            value={'Put your text here...'}
+          <GenTextInput id="test-label" label="Label" style={{ width: "100%" }} rows={1}
+            value={'Text typed...'}
             onChange={(evt: React.ChangeEvent<GenTextInputElement>) => { console.log(evt.target.value); }} />
           <br /><br />
-          <GenTextInput id="test-label2" label="Label" style={{ width: "500px" }}
+          <GenTextInput id="test-label2" label="Label" style={{ width: "100%" }}
             placeholder="Put your text here..."
             onChange={(evt: React.ChangeEvent<GenTextInputElement>) => { console.log(evt.target.value); }} />
           <br /><br />

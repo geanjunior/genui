@@ -3,6 +3,7 @@ import {
   parseToButtonPhenotype,
   parseToColorPalettePhenotype,
   parseToHeaderPhenotype,
+  parseToInputPhenotype,
   parseToLabelPhenotype,
   parseToLayoutPhenotype,
   parseToParagraphPhenotype,
@@ -30,8 +31,9 @@ const parsePhenotypes = (genotypes: number[][]) => {
     map[DnaSequence.Paragraph] = parseToParagraphPhenotype(genotypes, map);
     map[DnaSequence.Button] = parseToButtonPhenotype(genotypes, map);
     map[DnaSequence.Label] = parseToLabelPhenotype(genotypes, map);
-    map[DnaSequence.TextInput] = parseToTextInputPhenotype(genotypes, map);
-    map[DnaSequence.SelectInput] = parseToSelectInputPhenotype(genotypes, map);
+    map[DnaSequence.Input] = parseToInputPhenotype(genotypes, map);
+    map[DnaSequence.TextInput] = parseToTextInputPhenotype(genotypes);
+    map[DnaSequence.SelectInput] = parseToSelectInputPhenotype(genotypes);
     return map;
   })();
 

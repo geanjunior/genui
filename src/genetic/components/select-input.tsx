@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { GenSelectInputPhenotype, DnaSequence, useDesignSystemDna, GenSelectInputStylePhenotype, GenLabel } from "..";
+import { GenSelectInputPhenotype, DnaSequence, useDesignSystemDna, GenLabel, GenInputPhenotype, GenInputStylePhenotype } from "..";
 import React from "react";
 
 type GenSelectInputElement = (HTMLElement | HTMLSelectElement) & {
@@ -27,9 +27,11 @@ const GenSelectOption = ({ name, label, value, placeholder, onChange }: GenSelec
 
   useEffect(() => {
     if (designSystemDna) {
-      const phenotype = designSystemDna.phenotypes[DnaSequence.SelectInput] as GenSelectInputPhenotype;
-      setVariation(phenotype.variation);
-      setStylePhen({ color: phenotype.input.color, lineHeight: phenotype.input.lineHeight });
+      const inputPhenotype = designSystemDna.phenotypes[DnaSequence.Input] as GenInputPhenotype;
+      const selectInputPhenotype = designSystemDna.phenotypes[DnaSequence.SelectInput] as GenSelectInputPhenotype;
+
+      setVariation(selectInputPhenotype.variation);
+      setStylePhen({ color: inputPhenotype.input.color, lineHeight: inputPhenotype.input.lineHeight });
     }
   }, [designSystemDna]);
 
@@ -42,7 +44,7 @@ const GenSelectOption = ({ name, label, value, placeholder, onChange }: GenSelec
 
 const GenSelectInput = React.forwardRef(({ label, id, style, value, placeholder, children, onChange, ...props }: GenSelectInputProps, ref) => {
   const [designSystemDna] = useDesignSystemDna();
-  const [stylePhen, setStylePhen] = useState<React.CSSProperties | GenSelectInputStylePhenotype>();
+  const [stylePhen, setStylePhen] = useState<React.CSSProperties | GenInputStylePhenotype>();
   const [_variation, setVariation] = useState<number>(0);
   const [_label, setLabel] = useState<number>(0);
   const [_value, setValue] = useState<string | number | readonly string[] | undefined>(value || '');
@@ -56,11 +58,14 @@ const GenSelectInput = React.forwardRef(({ label, id, style, value, placeholder,
 
   useEffect(() => {
     if (designSystemDna) {
-      const phenotype = designSystemDna.phenotypes[DnaSequence.SelectInput] as GenSelectInputPhenotype;
-      setVariation(phenotype.variation);
-      setLabel(phenotype.label);
+      const inputPhenotype = designSystemDna.phenotypes[DnaSequence.Input] as GenInputPhenotype;
+      const selectInputPhenotype = designSystemDna.phenotypes[DnaSequence.SelectInput] as GenSelectInputPhenotype;
+      
+      setVariation(selectInputPhenotype.variation);
+      setLabel(inputPhenotype.label);
       setStylePhen({
-        ...phenotype.input,
+        boxSizing: 'border-box',
+        ...inputPhenotype.input,
         ...style
       });
     }
@@ -100,7 +105,7 @@ const GenSelectInput = React.forwardRef(({ label, id, style, value, placeholder,
       })()}
     </div>;
 
-  return <div style={{ display: 'inline-block' }}>
+  return <div style={{ display: 'inline-block', width: (stylePhen as React.CSSProperties)?.width }}>
     {(() => {
       switch (_label) {
         case 1: return <>
@@ -110,7 +115,7 @@ const GenSelectInput = React.forwardRef(({ label, id, style, value, placeholder,
               style={{ display: 'inline-block', marginRight: '10px', marginTop: stylePhen?.paddingTop }}
             >{label}</GenLabel>
           </div>
-          <div style={{ display: 'table-cell' }}>
+          <div style={{ display: 'table-cell', width: (stylePhen as React.CSSProperties)?.width }}>
             {input}
           </div>
         </>

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { GenTextInputPhenotype, DnaSequence, useDesignSystemDna, GenTextInputStylePhenotype, GenLabel, doShadeColor, hexToRgb, calculateColorLuminance } from "..";
+import { GenTextInputPhenotype, DnaSequence, useDesignSystemDna, GenInputStylePhenotype, GenLabel, doShadeColor, hexToRgb, calculateColorLuminance, GenInputPhenotype } from "..";
 import React from "react";
 
 type GenTextInputElement = (HTMLElement | HTMLInputElement | HTMLTextAreaElement) & {
@@ -14,7 +14,7 @@ interface GenTextInputProps extends React.DetailedHTMLProps<React.InputHTMLAttri
 
 const GenTextInput = React.forwardRef(({ label, id, style, value, rows, placeholder, onChange, ...props }: GenTextInputProps, ref) => {
   const [designSystemDna] = useDesignSystemDna();
-  const [stylePhen, setStylePhen] = useState<React.CSSProperties | GenTextInputStylePhenotype>();
+  const [stylePhen, setStylePhen] = useState<React.CSSProperties | GenInputStylePhenotype>();
   const [_rows, setRows] = useState<number>(rows || 1);
   const [_label, setLabel] = useState<number>(0);
   const [_value, setValue] = useState<string | number | readonly string[] | undefined>(value || '');
@@ -56,11 +56,14 @@ const GenTextInput = React.forwardRef(({ label, id, style, value, rows, placehol
 
   useEffect(() => {
     if (designSystemDna) {
-      const phenotype = designSystemDna.phenotypes[DnaSequence.TextInput] as GenTextInputPhenotype;
-      setRows(rows || phenotype.rows);
-      setLabel(phenotype.label);
+      const inputPhenotype = designSystemDna.phenotypes[DnaSequence.Input] as GenInputPhenotype;
+      const textInputPhenotype = designSystemDna.phenotypes[DnaSequence.TextInput] as GenTextInputPhenotype;
+      
+      setRows(rows || textInputPhenotype.rows);
+      setLabel(inputPhenotype.label);
       setStylePhen({
-        ...phenotype.input,
+        boxSizing: 'border-box',
+        ...inputPhenotype.input,
         ...style
       });
     }
@@ -96,7 +99,7 @@ const GenTextInput = React.forwardRef(({ label, id, style, value, rows, placehol
       onChange={changeCallback}
     />;
 
-  return <div style={{ display: 'inline-block' }}>
+  return <div style={{ display: 'inline-block', width: (stylePhen as React.CSSProperties)?.width }}>
     <style>{placeholderStyle}</style>
     {(() => {
       switch (_label) {
@@ -107,7 +110,7 @@ const GenTextInput = React.forwardRef(({ label, id, style, value, rows, placehol
               style={{ display: 'inline-block', marginRight: '10px', marginTop: _rows === 1 ? undefined : stylePhen?.paddingTop }}
             >{label}</GenLabel>
           </div>
-          <div style={{ display: 'table-cell' }}>
+          <div style={{ display: 'table-cell', width: (stylePhen as React.CSSProperties)?.width }}>
             {input}
           </div>
         </>

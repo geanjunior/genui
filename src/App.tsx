@@ -81,7 +81,7 @@ function App() {
           </GenSelectInput>
           <br /><br />
           <GenTextInput id="test-label" label="Label" style={{ width: "100%" }} rows={1}
-            value={'Text typed...'}
+            value={'Typed text...'}
             onChange={(evt: React.ChangeEvent<GenTextInputElement>) => { console.log(evt.target.value); }} />
           <br /><br />
           <GenTextInput id="test-label2" label="Label" style={{ width: "100%" }}

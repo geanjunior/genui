@@ -15,7 +15,7 @@ const parseToLayoutPhenotype = (
 
   let i = 0;
   return {
-    padding: `${layoutGens[i++]}px`,
+    padding: `${layoutGens[i++]}px ${layoutGens[i++]}px`,
     textAlign: textAlignPhenotype[layoutGens[i++]],
     backgroundColor: colorPalette[layoutGens[i++]],
   } as GenLayoutPhenotype;

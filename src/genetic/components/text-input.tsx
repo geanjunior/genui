@@ -16,7 +16,7 @@ const GenTextInput = React.forwardRef(({ label, id, style, value, rows, placehol
   const [designSystemDna] = useDesignSystemDna();
   const [stylePhen, setStylePhen] = useState<React.CSSProperties | GenTextInputStylePhenotype>();
   const [_rows, setRows] = useState<number>(rows || 1);
-  const [_variation, setVariation] = useState<number>(0);
+  const [_label, setLabel] = useState<number>(0);
   const [_value, setValue] = useState<string | number | readonly string[] | undefined>(value || '');
 
   const [changeEvent, setChangeEvent] = useState<React.ChangeEvent<GenTextInputElement>>();
@@ -58,7 +58,7 @@ const GenTextInput = React.forwardRef(({ label, id, style, value, rows, placehol
     if (designSystemDna) {
       const phenotype = designSystemDna.phenotypes[DnaSequence.TextInput] as GenTextInputPhenotype;
       setRows(rows || phenotype.rows);
-      setVariation(phenotype.variation);
+      setLabel(phenotype.label);
       setStylePhen({
         ...phenotype.input,
         ...style
@@ -82,7 +82,7 @@ const GenTextInput = React.forwardRef(({ label, id, style, value, rows, placehol
       style={{ ...stylePhen }}
       value={_value}
       {...(props as React.DetailedHTMLProps<React.TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement>)}
-      placeholder={_variation === 0 ? placeholder || label : placeholder}
+      placeholder={_label === 0 ? placeholder || label : placeholder}
       onChange={changeCallback}
     />
     : <input
@@ -92,14 +92,14 @@ const GenTextInput = React.forwardRef(({ label, id, style, value, rows, placehol
       style={{ ...stylePhen }}
       value={_value}
       {...(props as React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>)}
-      placeholder={_variation === 0 ? placeholder || label : placeholder}
+      placeholder={_label === 0 ? placeholder || label : placeholder}
       onChange={changeCallback}
     />;
 
   return <div style={{ display: 'inline-block' }}>
     <style>{placeholderStyle}</style>
     {(() => {
-      switch (_variation) {
+      switch (_label) {
         case 1: return <>
           <div style={{ display: 'table-cell', verticalAlign: _rows === 1 ? 'middle' : 'top' }}>
             <GenLabel

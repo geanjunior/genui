@@ -7,6 +7,7 @@ import {
   GenotypeValuesSchema,
   IndividualSchemaAndGen,
   Searchspace,
+
   mountTextInputGenotypeSchema,
   mountColorPaletteSchema,
   mountHeaderGenotypeSchema,
@@ -14,7 +15,8 @@ import {
   mountParagraphGenotypeSchema,
   mountButtonGenotypeSchema,
   mountTypographyGenotypeSchema,
-  mountLabelGenotypeSchema
+  mountLabelGenotypeSchema,
+  mountSelectInputGenotypeSchema
 } from "..";
 
 enum DnaSequence {
@@ -25,7 +27,8 @@ enum DnaSequence {
   Paragraph,
   Button,
   Label,
-  TextInput
+  TextInput,
+  SelectInput
 }
 
 const genotypeSequenceMap = ((): GenotypeSchemas[][] => {
@@ -38,6 +41,7 @@ const genotypeSequenceMap = ((): GenotypeSchemas[][] => {
   map[DnaSequence.Button] = mountButtonGenotypeSchema();
   map[DnaSequence.Label] = mountLabelGenotypeSchema();
   map[DnaSequence.TextInput] = mountTextInputGenotypeSchema();
+  map[DnaSequence.SelectInput] = mountSelectInputGenotypeSchema();
   return map;
 })();
 

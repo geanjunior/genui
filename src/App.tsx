@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { DnaSequence, GenButton, GenHeader, GenLayout, GenParagraph, GenTextInput, GenTextInputElement, UIColorPalette, generateRandomIndividual, useDesignSystemDna } from "./genetic";
+import { DnaSequence, GenButton, GenHeader, GenLayout, GenParagraph, GenSelectInput, GenSelectInputElement, GenSelectOption, GenTextInput, GenTextInputElement, UIColorPalette, generateRandomIndividual, useDesignSystemDna } from "./genetic";
 
 import "./App.css"
 
@@ -37,12 +37,14 @@ function App() {
   useEffect(() => {
     if (!designSystemDna) {
       generateRandomCallback();
-      startAutoGenerateCallback();
+      //startAutoGenerateCallback();
       return () => clearInterval(intervalId);
     }
+
     console.clear();
     console.log('designSystemDna.genotypes: ', JSON.stringify(designSystemDna?.genotypes));
     console.log('designSystemDna.phenotypes: ', JSON.stringify(designSystemDna?.phenotypes, undefined, 2));
+
   }, [designSystemDna, setDesignSystemDna, intervalId, generateRandomCallback, startAutoGenerateCallback]);
 
   return (
@@ -60,10 +62,24 @@ function App() {
       </section>
       <section style={{ position: "absolute", top: "63px", bottom: 0, right: 0, left: 0 }}>
         <GenLayout>
+          <GenHeader>Wellcome to Genetic UI</GenHeader>
           <GenParagraph>
             GeneticUI is a cutting-edge React library that introduces genetic algorithms to UI design. By harnessing real-time interactivity, users can modify design variables like colors and spacing, prompting the genetic algorithm to evolve UI components accordingly. This innovative approach leads to a collaborative and ever-changing UI experience, reflecting the dynamic nature of genetic evolution.
           </GenParagraph>
-          <GenHeader>Wellcome to Genetic UI</GenHeader>
+          <GenSelectInput id="selector" label="Choose" style={{ width: "500px" }}
+            //placeholder="Choose one option..."
+            onChange={(evt: React.ChangeEvent<GenSelectInputElement>) => { console.log(evt.target.value); }}>
+            <GenSelectOption label="Option One" value={1} />
+            <GenSelectOption label="Option Two" value={"2"} />
+            <GenSelectOption label="Option Three" value={"three"} />
+            <GenSelectOption label="Option Four" value={4} />
+            <GenSelectOption label="Option Five" value={"5"} />
+            <GenSelectOption label="Option Six" value={"six"} />
+            <GenSelectOption label="Option Seven" value={7} />
+            <GenSelectOption label="Option Eight" value={"8"} />
+            <GenSelectOption label="Option Nine" value={"nine"} />
+          </GenSelectInput>
+          <br /><br />
           <GenTextInput id="test-label" label="Label" style={{ width: "500px" }} rows={1}
             value={'Put your text here...'}
             onChange={(evt: React.ChangeEvent<GenTextInputElement>) => { console.log(evt.target.value); }} />

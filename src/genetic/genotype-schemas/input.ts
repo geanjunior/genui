@@ -10,7 +10,7 @@ const mountInputGenotypeSchema = () => [
   { type: Searchspace.Range, from: 11, to: 30 }, //font-size
   { type: Searchspace.Range, from: 0, to: 9 }, //font-weight
   { type: Searchspace.Range, from: 0, to: mountTypographyGenotypeSchema().length - 1 }, //font-family
-  { type: Searchspace.Range, from: 10, to: 30 }, //line-height
+  { type: Searchspace.Range, from: 5, to: 25 }, //line-height
   {
     name: "text-input.colors", type: Searchspace.DistinctValuesFromRule,
     rule: getColorsRule, exclude: ["text-input.background-color"]

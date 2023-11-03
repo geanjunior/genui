@@ -35,11 +35,16 @@ const GenSelectOption = ({ name, label, value, placeholder, onChange }: GenSelec
     }
   }, [designSystemDna]);
 
-  return _variation == 0
-    ? <option value={value} hidden={placeholder}>{label}</option>
-    : <GenLabel style={{ ...stylePhen, display: 'block', textAlign: 'left' }}>
-      <input type="radio" name={name} value={value} onChange={onChange} /> {label}
-    </GenLabel>;
+  return (() => {
+    switch (_variation) {
+      case 0:
+        return <option value={value} hidden={placeholder}>{label}</option>
+      default:
+        return <GenLabel style={{ ...stylePhen, display: 'block', textAlign: 'left' }}>
+          <input type="radio" name={name} value={value} onChange={onChange} /> {label}
+        </GenLabel>
+    }
+  })();
 }
 
 const GenSelectInput = React.forwardRef(({ label, id, style, value, placeholder, children, onChange, ...props }: GenSelectInputProps, ref) => {
@@ -51,16 +56,16 @@ const GenSelectInput = React.forwardRef(({ label, id, style, value, placeholder,
 
   const [changeEvent, setChangeEvent] = useState<React.ChangeEvent<GenSelectInputElement>>();
 
-  const changeCallback = useCallback((evt: React.ChangeEvent<GenSelectInputElement | HTMLInputElement>) => {
+  const changeCallback = useCallback((evt: React.ChangeEvent<GenSelectInputElement | HTMLInputElement>, optionProps?: GenSelectOptionProps) => {
     setChangeEvent(evt);
-    setValue(evt.target.value);
+    setValue(optionProps?.value || evt.target.value);
   }, []);
 
   useEffect(() => {
     if (designSystemDna) {
       const inputPhenotype = designSystemDna.phenotypes[DnaSequence.Input] as GenInputPhenotype;
       const selectInputPhenotype = designSystemDna.phenotypes[DnaSequence.SelectInput] as GenSelectInputPhenotype;
-      
+
       setVariation(selectInputPhenotype.variation);
       setLabel(inputPhenotype.label);
       setStylePhen({
@@ -79,31 +84,38 @@ const GenSelectInput = React.forwardRef(({ label, id, style, value, placeholder,
     }
   }, [_value, changeEvent, onChange]);
 
-  const input = _variation == 0
-    ? <select
-      id={id}
-      ref={ref as React.LegacyRef<HTMLSelectElement>}
-      style={{ ...stylePhen, textAlign: 'left' }}
-      {...(props as React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLSelectElement>, HTMLSelectElement>)}
-      onChange={changeCallback}
-    >{placeholder || _label === 0
-      ? <>
-        <GenSelectOption placeholder value={undefined} label={_label === 0 ? placeholder || label : placeholder} />
-        {children}
-      </>
-      : children}</select>
-    : <div style={{ ...stylePhen }} title={placeholder}>
-      {(() => {
-        const name = `select-input-name-${Math.round(Math.random() * Number.MAX_SAFE_INTEGER)}`;
-        return <>
-          {(placeholder || _label == 0) && <div style={{ textAlign: 'left', overflow: 'hidden' }}>{placeholder || label}</div>}
-          <div style={{ overflowY: 'auto', maxHeight: '150px' }}>
-            {React.Children.map(children,
-              child => React.cloneElement(child as React.ReactElement<GenSelectOptionProps>, { name, onChange: changeCallback }))}
-          </div>
-        </>
-      })()}
-    </div>;
+  const input = (() => {
+    const name = `select-input-name-${Math.round(Math.random() * Number.MAX_SAFE_INTEGER)}`;
+
+    switch (_variation) {
+      case 1:
+        return <div style={{ ...stylePhen }} title={placeholder}>
+          {(() => {
+            return <>
+              {(placeholder || _label === 0) && <div style={{ textAlign: 'left', overflow: 'hidden' }}>{placeholder || label}</div>}
+              <div style={{ overflowY: 'auto', maxHeight: '150px' }}>
+                {React.Children.map(children,
+                  child => React.cloneElement(child as React.ReactElement<GenSelectOptionProps>, { name, onChange: changeCallback }))}
+              </div>
+            </>
+          })()}
+        </div>
+
+      default:
+        return <select
+          id={id}
+          ref={ref as React.LegacyRef<HTMLSelectElement>}
+          style={{ ...stylePhen, textAlign: 'left' }}
+          {...(props as React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLSelectElement>, HTMLSelectElement>)}
+          onChange={changeCallback}
+        >{placeholder || _label === 0
+          ? <>
+            <GenSelectOption placeholder value={undefined} label={_label === 0 ? placeholder || label : placeholder} />
+            {children}
+          </>
+          : children}</select>
+    }
+  })();
 
   return <div style={{ display: 'inline-block', width: (stylePhen as React.CSSProperties)?.width }}>
     {(() => {

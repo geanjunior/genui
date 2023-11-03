@@ -7,10 +7,10 @@ const mountParagraphGenotypeSchema = () => [
   { type: Searchspace.Range, from: 15, to: 30 }, //font-size
   { type: Searchspace.Range, from: 0, to: 4 }, //font-weight
   { type: Searchspace.Range, from: 0, to: mountTypographyGenotypeSchema().length - 1 }, //font-family
-  { type: Searchspace.Range, from: 0, to: 40 }, //line-height
+  { type: Searchspace.Range, from: 0, to: 20 }, //line-height
   { type: Searchspace.Range, from: 0, to: 2 }, //letter-spacing
   { type: Searchspace.Range, from: 0, to: 10 }, //word-spacing
-  { type: Searchspace.Values, values: [0, 70, 70 * 2] }, //text-indent
+  { type: Searchspace.Values, values: [0] }, //text-indent
   {
     type: Searchspace.Values,
     values: textAlignPhenotype.map((_, i) => i).filter(i => ![

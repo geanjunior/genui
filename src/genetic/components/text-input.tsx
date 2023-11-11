@@ -104,10 +104,10 @@ const GenTextInput = React.forwardRef(({ label, id, style, value, rows, placehol
     {(() => {
       switch (_label) {
         case 1: return <>
-          <div style={{ display: 'table-cell', verticalAlign: _rows === 1 ? 'middle' : 'top' }}>
+          <div style={{ display: 'table-cell', verticalAlign: 'middle' }}>
             <GenLabel
               htmlFor={id}
-              style={{ display: 'inline-block', marginRight: '10px', marginTop: _rows === 1 ? undefined : stylePhen?.paddingTop }}
+              style={{ display: 'inline-block', marginRight: '10px' }}
             >{label}</GenLabel>
           </div>
           <div style={{ display: 'table-cell', width: (stylePhen as React.CSSProperties)?.width }}>

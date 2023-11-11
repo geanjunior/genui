@@ -11,19 +11,21 @@ import {
   mountTextInputGenotypeSchema,
   mountColorPaletteSchema,
   mountHeaderGenotypeSchema,
-  mountLayoutPaletteSchema,
+  mountLayoutSchema,
   mountParagraphGenotypeSchema,
   mountButtonGenotypeSchema,
   mountTypographyGenotypeSchema,
   mountLabelGenotypeSchema,
   mountSelectInputGenotypeSchema,
-  mountInputGenotypeSchema
+  mountInputGenotypeSchema,
+  mountSectionSchema
 } from "..";
 
 enum DnaSequence {
   ColorPalette,
   Typography,
   Layout,
+  Section,
   Header,
   Paragraph,
   Button,
@@ -37,7 +39,8 @@ const genotypeSequenceMap = ((): GenotypeSchemas[][] => {
   const map = [];
   map[DnaSequence.ColorPalette] = mountColorPaletteSchema();
   map[DnaSequence.Typography] = mountTypographyGenotypeSchema();
-  map[DnaSequence.Layout] = mountLayoutPaletteSchema();
+  map[DnaSequence.Layout] = mountLayoutSchema();
+  map[DnaSequence.Section] = mountSectionSchema();
   map[DnaSequence.Header] = mountHeaderGenotypeSchema();
   map[DnaSequence.Paragraph] = mountParagraphGenotypeSchema();
   map[DnaSequence.Button] = mountButtonGenotypeSchema();

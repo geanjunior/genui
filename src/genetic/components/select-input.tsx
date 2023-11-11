@@ -66,11 +66,16 @@ const GenSelectInput = React.forwardRef(({ label, id, style, value, placeholder,
       const inputPhenotype = designSystemDna.phenotypes[DnaSequence.Input] as GenInputPhenotype;
       const selectInputPhenotype = designSystemDna.phenotypes[DnaSequence.SelectInput] as GenSelectInputPhenotype;
 
+      const lineHeight = inputPhenotype.input.lineHeight ? parseInt(inputPhenotype.input.lineHeight.replace('px', '')) : undefined;
+      const paddingTop = inputPhenotype.input.paddingTop ? parseInt(inputPhenotype.input.paddingTop.replace('px', '')) : undefined;
+
       setVariation(selectInputPhenotype.variation);
       setLabel(inputPhenotype.label);
       setStylePhen({
         boxSizing: 'border-box',
         ...inputPhenotype.input,
+        paddingTop: selectInputPhenotype.variation === 0 && paddingTop ? `${paddingTop + (lineHeight ? lineHeight / 4 : 0)}px` : undefined,
+        paddingBottom: selectInputPhenotype.variation === 0 && paddingTop ? `${paddingTop + (lineHeight ? lineHeight / 4 : 0)}px` : undefined,
         ...style
       });
     }
@@ -89,7 +94,7 @@ const GenSelectInput = React.forwardRef(({ label, id, style, value, placeholder,
 
     switch (_variation) {
       case 1:
-        return <div style={{ ...stylePhen }} title={placeholder}>
+        return <div style={{ ...stylePhen, paddingRight: 0 }} title={placeholder}>
           {(() => {
             return <>
               {(placeholder || _label === 0) && <div style={{ textAlign: 'left', overflow: 'hidden' }}>{placeholder || label}</div>}
@@ -121,10 +126,10 @@ const GenSelectInput = React.forwardRef(({ label, id, style, value, placeholder,
     {(() => {
       switch (_label) {
         case 1: return <>
-          <div style={{ display: 'table-cell', verticalAlign: _variation == 0 ? undefined : 'top' }}>
+          <div style={{ display: 'table-cell', verticalAlign: _variation == 0 ? undefined : 'middle' }}>
             <GenLabel
               htmlFor={id}
-              style={{ display: 'inline-block', marginRight: '10px', marginTop: stylePhen?.paddingTop }}
+              style={{ display: 'inline-block', marginRight: '10px' }}
             >{label}</GenLabel>
           </div>
           <div style={{ display: 'table-cell', width: (stylePhen as React.CSSProperties)?.width }}>

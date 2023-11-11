@@ -1,7 +1,8 @@
 import { DnaSequence, Phenotype, textAlignPhenotype } from "..";
+import type { Property } from 'csstype';
 
 interface GenLayoutPhenotype extends Phenotype {
-  textAlign?: typeof textAlignPhenotype[number];
+  textAlign?: Property.TextAlign;
   backgroundColor: string,
 }
 

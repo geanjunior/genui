@@ -1,6 +1,6 @@
 import { Searchspace, getColorsRule, textAlignPhenotype } from "..";
 
-const mountLayoutPaletteSchema = () => [
+const mountLayoutSchema = () => [
   { type: Searchspace.Range, from: 0, to: 100 }, //padding-top-bottom
   { type: Searchspace.Range, from: 0, to: 500 }, //padding-left-right
   { type: Searchspace.Values, values: textAlignPhenotype.map((_, i) => i) }, //text-align
@@ -11,5 +11,5 @@ const mountLayoutPaletteSchema = () => [
 ];
 
 export {
-  mountLayoutPaletteSchema
+  mountLayoutSchema
 }

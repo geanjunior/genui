@@ -7,7 +7,7 @@ const mountInputGenotypeSchema = () => [
   { type: Searchspace.Range, from: 0, to: 30 }, //border-radius
   { type: Searchspace.Range, from: 5, to: 20 }, //padding-top-bottom
   { type: Searchspace.Range, from: 5, to: 20 }, //padding-left-right
-  { type: Searchspace.Range, from: 11, to: 30 }, //font-size
+  { type: Searchspace.Range, from: 10, to: 30 }, //font-size
   { type: Searchspace.Range, from: 0, to: 9 }, //font-weight
   { type: Searchspace.Range, from: 0, to: mountTypographyGenotypeSchema().length - 1 }, //font-family
   { type: Searchspace.Range, from: 5, to: 25 }, //line-height

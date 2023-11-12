@@ -2,12 +2,11 @@ import { useEffect, useState } from "react";
 import { GenSectionPhenotype, DnaSequence, useDesignSystemDna, GenSectionStylePhenotype, GenSectionAlignment } from "../../genetic";
 import React from "react";
 
-
 interface GenSectionProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> {
-
+  sectionType?: DnaSequence.Section | DnaSequence.SecondSection
 }
 
-const GenSection = ({ children, style, ...props }: GenSectionProps) => {
+const GenSection = ({ sectionType, children, style, ...props }: GenSectionProps) => {
   const [designSystemDna] = useDesignSystemDna();
   const [stylePhen, setStylePhen] = useState<React.CSSProperties | GenSectionStylePhenotype>();
   const [childStyle, setChildStyle] = useState<React.CSSProperties>();
@@ -16,18 +15,18 @@ const GenSection = ({ children, style, ...props }: GenSectionProps) => {
 
   useEffect(() => {
     if (designSystemDna) {
-      const sectionPhenotype = designSystemDna.phenotypes[DnaSequence.Section] as GenSectionPhenotype;
+      const sectionPhenotype = designSystemDna.phenotypes[sectionType || DnaSequence.Section] as GenSectionPhenotype;
       let sectionStyle = { padding: 0 };
       let childStyle = { display: 'inline-block', verticalAlign: 'text-top' };
 
       switch (sectionPhenotype.variation) {
         case 1:
           sectionStyle = { ...sectionStyle, ...{ display: 'flex' } };
-          childStyle = { ...childStyle, ...{ display: 'flex', flex: 1, flexBasis: '100%' } };
+          childStyle = { ...childStyle, ...{ display: 'flex', flex: 1, width  : '100%' } };
           break;
-        default:
-          childStyle = { ...childStyle, ...{ width: `${[100, 45, 28][sectionPhenotype.columns - 1]}%`, boxSizing: 'border-box' } };
-          break;
+          default:
+            childStyle = { ...childStyle, ...{ width: `${[100, 45, 28][sectionPhenotype.columns - 1]}%`, boxSizing: 'border-box' } };
+            break;
       }
 
       setVariation(sectionPhenotype.variation);
@@ -35,9 +34,9 @@ const GenSection = ({ children, style, ...props }: GenSectionProps) => {
       setStylePhen({ ...sectionPhenotype.section, ...sectionStyle, ...style });
       setChildStyle({ ...sectionPhenotype.child, ...childStyle });
     }
-  }, [style, designSystemDna]);
+  }, [style, sectionType, designSystemDna]);
 
-  return <section style={{padding: 0}} {...props}>
+  return <section style={{padding: 0, width: '100%', boxSizing: 'border-box'}} {...props}>
     {(() => {
       switch (_variation) {
         case 1:
@@ -53,7 +52,7 @@ const GenSection = ({ children, style, ...props }: GenSectionProps) => {
             return rows;
           })()
         default:
-          return <GenSectionAlignment {...props}>{children}</GenSectionAlignment>;
+          return <GenSectionAlignment childStyle={childStyle} {...props}>{children}</GenSectionAlignment>;
       }
     })()}
   </section>

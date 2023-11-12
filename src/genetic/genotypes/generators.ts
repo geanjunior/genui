@@ -28,6 +28,7 @@ enum DnaSequence {
   Layout,
   SectionAlignment,
   Section,
+  SecondSection,
   Header,
   Paragraph,
   Button,
@@ -44,6 +45,7 @@ const genotypeSequenceMap = ((): GenotypeSchemas[][] => {
   map[DnaSequence.Layout] = mountLayoutSchema();
   map[DnaSequence.SectionAlignment] = mountSectionAlignmentSchema();
   map[DnaSequence.Section] = mountSectionSchema();
+  map[DnaSequence.SecondSection] = mountSectionSchema();
   map[DnaSequence.Header] = mountHeaderGenotypeSchema();
   map[DnaSequence.Paragraph] = mountParagraphGenotypeSchema();
   map[DnaSequence.Button] = mountButtonGenotypeSchema();

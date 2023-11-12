@@ -19,10 +19,11 @@ interface GenSectionPhenotype extends GenSectionAlignmentPhenotype {
 }
 
 const parseToSectionPhenotype = (
-  genotypes: number[][]
+  genotypes: number[][],
+  sectionType: DnaSequence.Section | DnaSequence.SecondSection
 ): GenSectionPhenotype => {
 
-  const sectionGens = genotypes[DnaSequence.Section];
+  const sectionGens = genotypes[sectionType];
 
   let i = 0;
   let variation = 1;

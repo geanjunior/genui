@@ -4,6 +4,7 @@ export * from "./typography";
 export * from "./layout";
 export * from "./section-alignment";
 export * from "./section";
+export * from "./second-section";
 export * from "./header";
 export * from "./paragraph";
 export * from "./button";

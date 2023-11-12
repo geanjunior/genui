@@ -30,7 +30,8 @@ const parsePhenotypes = (genotypes: number[][]) => {
     map[DnaSequence.Typography] = parseToTypographyPhenotype(genotypes);
     map[DnaSequence.Layout] = parseToLayoutPhenotype(genotypes, map);
     map[DnaSequence.SectionAlignment] = parseToSectionAlignmentPhenotype(genotypes);
-    map[DnaSequence.Section] = parseToSectionPhenotype(genotypes);
+    map[DnaSequence.Section] = parseToSectionPhenotype(genotypes, DnaSequence.Section);
+    map[DnaSequence.SecondSection] = parseToSectionPhenotype(genotypes, DnaSequence.SecondSection);
     map[DnaSequence.Header] = parseToHeaderPhenotype(genotypes, map);
     map[DnaSequence.Paragraph] = parseToParagraphPhenotype(genotypes, map);
     map[DnaSequence.Button] = parseToButtonPhenotype(genotypes, map);

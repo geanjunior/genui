@@ -1,26 +1,22 @@
-import { DnaSequence, Phenotype, textAlignPhenotype } from "..";
+import { DnaSequence, GenSectionAlignmentPhenotype, GenSectionAlignmentStylePhenotype, textAlignPhenotype } from "..";
 import type { Property } from 'csstype';
 
 const flexDirectionPhenotype = ['row', 'row-reverse', 'column', 'column-reverse'];
 const alignItemsPhenotype = ['flex-start', 'flex-end', 'center', 'stretch'];
 
-interface GenSectionStylePhenotype {
-  textAlign?: Property.TextAlign,
+interface GenSectionStylePhenotype extends GenSectionAlignmentStylePhenotype {
   flexDirection?: Property.FlexDirection,
   alignItems?: Property.AlignItems
 }
+
 interface GenSectionChildStylePhenotype {
-  paddign?: string,
   flexDirection?: Property.FlexDirection,
 }
 
-interface GenSectionPhenotype extends Phenotype {
+interface GenSectionPhenotype extends GenSectionAlignmentPhenotype {
   variation: number;
   columns: number;
-  row: GenSectionStylePhenotype;
-  child: GenSectionChildStylePhenotype;
 }
-
 
 const parseToSectionPhenotype = (
   genotypes: number[][]
@@ -34,7 +30,7 @@ const parseToSectionPhenotype = (
     variation: variation = sectionGens[i++],
     columns: sectionGens[i++],
     
-    row: {
+    section: {
       textAlign: textAlignPhenotype[sectionGens[i++]],
       flexDirection: variation === 1 ? flexDirectionPhenotype[sectionGens[i++]] : (() => {i++})(),
       alignItems: variation === 1 ? alignItemsPhenotype[sectionGens[i++]] : (() => {i++})(),

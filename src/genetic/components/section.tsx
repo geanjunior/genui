@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { GenSectionPhenotype, DnaSequence, useDesignSystemDna, GenSectionStylePhenotype } from "../../genetic";
+import { GenSectionPhenotype, DnaSequence, useDesignSystemDna, GenSectionStylePhenotype, GenSectionAlignment } from "../../genetic";
 import React from "react";
 
 
@@ -32,7 +32,7 @@ const GenSection = ({ children, style, ...props }: GenSectionProps) => {
 
       setVariation(sectionPhenotype.variation);
       setColumns(sectionPhenotype.columns);
-      setStylePhen({ ...sectionPhenotype.row, ...sectionStyle, ...style });
+      setStylePhen({ ...sectionPhenotype.section, ...sectionStyle, ...style });
       setChildStyle({ ...sectionPhenotype.child, ...childStyle });
     }
   }, [style, designSystemDna]);
@@ -53,9 +53,7 @@ const GenSection = ({ children, style, ...props }: GenSectionProps) => {
             return rows;
           })()
         default:
-          return <div style={{ ...stylePhen }}>
-            {React.Children.map(children, child => <div style={childStyle}>{child}</div>)}
-          </div>;
+          return <GenSectionAlignment {...props}>{children}</GenSectionAlignment>;
       }
     })()}
   </section>

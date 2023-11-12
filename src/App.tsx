@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { DnaSequence, GenButton, GenHeader, GenLayout, GenParagraph, GenSection, GenSelectInput, GenSelectInputElement, GenSelectOption, GenTextInput, GenTextInputElement, UIColorPalette, generateRandomIndividual, useDesignSystemDna } from "./genetic";
+import { DnaSequence, GenButton, GenHeader, GenLayout, GenParagraph, GenSection, GenSectionAlignment, GenSelectInput, GenSelectInputElement, GenSelectOption, GenTextInput, GenTextInputElement, UIColorPalette, generateRandomIndividual, useDesignSystemDna } from "./genetic";
 
 import "./App.css"
 
@@ -89,9 +89,9 @@ function App() {
               value={'Typed text...'}
               onChange={(evt: React.ChangeEvent<GenTextInputElement>) => { console.log(evt.target.value); }} />
           </GenSection>
-          <GenSection>
+          <GenSectionAlignment>
             <GenButton onClick={() => setTimeout(() => alert("Button was clicked!"), 0)}>Button</GenButton>
-          </GenSection>
+          </GenSectionAlignment>
         </GenLayout>
       </section>
     </>

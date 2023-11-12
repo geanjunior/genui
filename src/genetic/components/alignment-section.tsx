@@ -1,20 +1,20 @@
 import { useEffect, useState } from "react";
-import { GenSectionAlignmentPhenotype, DnaSequence, useDesignSystemDna, GenSectionAlignmentStylePhenotype } from "../../genetic";
+import { GenAlignmentSectionPhenotype, DnaSequence, useDesignSystemDna, GenAlignmentSectionStylePhenotype } from "..";
 import React from "react";
 
 
-interface GenSectionAlignmentProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> {
+interface GenAlignmentSectionProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> {
   childStyle?: React.CSSProperties
 }
 
-const GenSectionAlignment = ({ children, style, childStyle, ...props }: GenSectionAlignmentProps) => {
+const GenAlignmentSection = ({ children, style, childStyle, ...props }: GenAlignmentSectionProps) => {
   const [designSystemDna] = useDesignSystemDna();
-  const [stylePhen, setStylePhen] = useState<React.CSSProperties | GenSectionAlignmentStylePhenotype>();
+  const [stylePhen, setStylePhen] = useState<React.CSSProperties | GenAlignmentSectionStylePhenotype>();
   const [_childStyle, setChildStyle] = useState<React.CSSProperties>();
 
   useEffect(() => {
     if (designSystemDna) {
-      const sectionPhenotype = designSystemDna.phenotypes[DnaSequence.Section] as GenSectionAlignmentPhenotype;
+      const sectionPhenotype = designSystemDna.phenotypes[DnaSequence.Section] as GenAlignmentSectionPhenotype;
       const defaultChildStyle = { display: 'inline-block', verticalAlign: 'text-top' };
 
       setStylePhen({ ...sectionPhenotype.section, ...{ boxSizing: 'border-box', width: '100%' }, ...style });
@@ -27,8 +27,8 @@ const GenSectionAlignment = ({ children, style, childStyle, ...props }: GenSecti
   </section>
 }
 
-export { GenSectionAlignment };
+export { GenAlignmentSection };
 
 export type {
-  GenSectionAlignmentProps
+  GenAlignmentSectionProps
 }

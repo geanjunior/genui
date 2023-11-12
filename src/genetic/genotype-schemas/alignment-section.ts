@@ -1,6 +1,6 @@
 import { Searchspace, textAlignPhenotype } from "..";
 
-const mountSectionAlignmentSchema = () => [
+const mountAlignmentSectionSchema = () => [
   /* session */
   {
     type: Searchspace.Values,
@@ -12,5 +12,5 @@ const mountSectionAlignmentSchema = () => [
 ];
 
 export {
-  mountSectionAlignmentSchema
+  mountAlignmentSectionSchema
 }

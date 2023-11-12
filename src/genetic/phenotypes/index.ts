@@ -2,7 +2,7 @@ export * from "./shared";
 export * from "./colors";
 export * from "./typography";
 export * from "./layout";
-export * from "./section-alignment";
+export * from "./alignment-section";
 export * from "./section";
 export * from "./second-section";
 export * from "./header";

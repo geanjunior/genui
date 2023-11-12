@@ -1,10 +1,10 @@
-import { DnaSequence, GenSectionAlignmentPhenotype, GenSectionAlignmentStylePhenotype, textAlignPhenotype } from "..";
+import { DnaSequence, GenAlignmentSectionPhenotype, GenAlignmentSectionStylePhenotype, textAlignPhenotype } from "..";
 import type { Property } from 'csstype';
 
 const flexDirectionPhenotype = ['row', 'row-reverse', 'column', 'column-reverse'];
 const alignItemsPhenotype = ['flex-start', 'flex-end', 'center', 'stretch'];
 
-interface GenSectionStylePhenotype extends GenSectionAlignmentStylePhenotype {
+interface GenSectionStylePhenotype extends GenAlignmentSectionStylePhenotype {
   flexDirection?: Property.FlexDirection,
   alignItems?: Property.AlignItems
 }
@@ -13,7 +13,7 @@ interface GenSectionChildStylePhenotype {
   flexDirection?: Property.FlexDirection,
 }
 
-interface GenSectionPhenotype extends GenSectionAlignmentPhenotype {
+interface GenSectionPhenotype extends GenAlignmentSectionPhenotype {
   variation: number;
   columns: number;
 }

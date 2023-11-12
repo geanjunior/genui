@@ -1,6 +1,6 @@
 export * from "./color-palette";
 export * from "./layout";
-export * from "./section-alignment";
+export * from "./alignment-section";
 export * from "./section";
 export * from "./header";
 export * from "./paragraph";

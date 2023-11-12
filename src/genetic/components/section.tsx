@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { GenSectionPhenotype, DnaSequence, useDesignSystemDna, GenSectionStylePhenotype, GenSectionAlignment } from "../../genetic";
+import { GenSectionPhenotype, DnaSequence, useDesignSystemDna, GenSectionStylePhenotype, GenAlignmentSection } from "../../genetic";
 import React from "react";
 
 interface GenSectionProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> {
@@ -52,7 +52,7 @@ const GenSection = ({ sectionType, children, style, ...props }: GenSectionProps)
             return rows;
           })()
         default:
-          return <GenSectionAlignment childStyle={childStyle} {...props}>{children}</GenSectionAlignment>;
+          return <GenAlignmentSection childStyle={childStyle} {...props}>{children}</GenAlignmentSection>;
       }
     })()}
   </section>

@@ -19,14 +19,14 @@ import {
   mountSelectInputGenotypeSchema,
   mountInputGenotypeSchema,
   mountSectionSchema,
-  mountSectionAlignmentSchema
+  mountAlignmentSectionSchema
 } from "..";
 
 enum DnaSequence {
   ColorPalette,
   Typography,
   Layout,
-  SectionAlignment,
+  AlignmentSection,
   Section,
   SecondSection,
   Header,
@@ -43,7 +43,7 @@ const genotypeSequenceMap = ((): GenotypeSchemas[][] => {
   map[DnaSequence.ColorPalette] = mountColorPaletteSchema();
   map[DnaSequence.Typography] = mountTypographyGenotypeSchema();
   map[DnaSequence.Layout] = mountLayoutSchema();
-  map[DnaSequence.SectionAlignment] = mountSectionAlignmentSchema();
+  map[DnaSequence.AlignmentSection] = mountAlignmentSectionSchema();
   map[DnaSequence.Section] = mountSectionSchema();
   map[DnaSequence.SecondSection] = mountSectionSchema();
   map[DnaSequence.Header] = mountHeaderGenotypeSchema();

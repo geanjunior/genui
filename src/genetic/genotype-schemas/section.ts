@@ -2,7 +2,7 @@ import { Searchspace, textAlignPhenotype } from "..";
 
 const mountSectionSchema = () => [
   { type: Searchspace.Values, values: [0, 1] }, //variation
-  { type: Searchspace.Values, values: [1, 2, 3] }, //colums
+  { type: Searchspace.Values, values: [1, 2] }, //colums
 
   /* row */
   {

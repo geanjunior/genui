@@ -47,7 +47,10 @@ const UserInterface = () => {
         </GenSection>
 
         <GenAlignmentSection>
-          <GenButton onClick={() => setTimeout(() => alert("Button was clicked!"), 0)}>Button</GenButton>
+          <GenButton onClick={(evt) => {
+            setTimeout(() => alert("Button was clicked!"), 0);
+            evt.preventDefault();
+          }}>Button</GenButton>
         </GenAlignmentSection>
       </form>
     </GenSection>

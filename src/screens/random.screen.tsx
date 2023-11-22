@@ -3,8 +3,10 @@ import { DnaSequence, UIColorPalette, generateRandomIndividual, useDesignSystemD
 
 import "./random.screen.css"
 import UserInterface from "../genetic/user-interface";
+import { useNavigate } from "react-router-dom";
 
 function RandomScreen() {
+  const navigate = useNavigate();
   const [designSystemDna, setDesignSystemDna] = useDesignSystemDna();
   const [intervalId, setIntervalId] = useState<number>();
 
@@ -48,9 +50,20 @@ function RandomScreen() {
 
   }, [designSystemDna, setDesignSystemDna, intervalId, generateRandomCallback, startAutoGenerateCallback]);
 
+  useEffect(() => {
+    return () => {
+      if (!intervalId) return;
+      clearInterval(intervalId);
+      setIntervalId(undefined);
+    }
+  }, [intervalId]);
+
   return (
     <>
       <section style={{ display: "block", height: "43px", right: 0, padding: "10px", backgroundColor: "#2C3C3C" }}>
+        <div style={{ float: "left", margin: "10px 0 0 10px" }}>
+          <button onClick={() => navigate("/")} style={{ cursor: 'pointer' }}>&larr;</button>
+        </div>
         <div style={{ float: "right", margin: "10px 0 0 10px" }}>
           <button onClick={generateRandomCallback} style={{ cursor: 'pointer' }}>&#x27F3;</button>
         </div>

@@ -1,21 +1,13 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { DnaSequence, UIColorPalette, generateRandomIndividual, useDesignSystemDna } from "../genetic";
+import { useCallback, useEffect, useState } from "react";
+import { generateRandomIndividual, useDesignSystemDna } from "../genetic";
 
-import "./random.screen.css"
-import UserInterface from "../genetic/user-interface";
 import { useNavigate } from "react-router-dom";
+import IndividualScreen from "./individual.screen";
 
-function RandomScreen() {
+const RandomScreen = () => {
   const navigate = useNavigate();
   const [designSystemDna, setDesignSystemDna] = useDesignSystemDna();
   const [intervalId, setIntervalId] = useState<number>();
-
-  const colorPalette: string[] = useMemo(() => {
-    if (designSystemDna) {
-      return designSystemDna?.phenotypes[DnaSequence.ColorPalette] as string[]
-    }
-    return [];
-  }, [designSystemDna]);
 
   const startAutoGenerateCallback = useCallback(() => {
     clearInterval(intervalId);
@@ -41,7 +33,6 @@ function RandomScreen() {
     if (!designSystemDna) {
       generateRandomCallback();
       //startAutoGenerateCallback();
-      return () => clearInterval(intervalId);
     }
 
     console.clear();
@@ -59,25 +50,22 @@ function RandomScreen() {
   }, [intervalId]);
 
   return (
-    <>
-      <section style={{ display: "block", height: "43px", right: 0, padding: "10px", backgroundColor: "#2C3C3C" }}>
+    <div style={{ position: "absolute", top: "0", bottom: "0", left: "0", right: "0" }}>
+      <div style={{ position: "absolute", left: "0", right: "0", height: "43px", backgroundColor: "#000" }}>
         <div style={{ float: "left", margin: "10px 0 0 10px" }}>
           <button onClick={() => navigate("/")} style={{ cursor: 'pointer' }}>&larr;</button>
         </div>
-        <div style={{ float: "right", margin: "10px 0 0 10px" }}>
+        <div style={{ float: "right", margin: "10px 10px 0 10px" }}>
           <button onClick={generateRandomCallback} style={{ cursor: 'pointer' }}>&#x27F3;</button>
         </div>
         <div style={{ float: "right", margin: "10px 0 0 10px" }}>
           <button onClick={toggleAutoGenerateCallback} style={{ cursor: 'pointer' }}>{intervalId ? <>&#x23F8;</> : <>&#x23F5;</>}</button>
         </div>
-        <div style={{ float: "right" }}>
-          <UIColorPalette colors={colorPalette}></UIColorPalette>
-        </div>
-      </section>
-      <section style={{ position: "absolute", top: "63px", bottom: 0, right: 0, left: 0 }}>
-        <UserInterface />
-      </section>
-    </>
+      </div>
+      <div style={{ position: "absolute", top: "43px", bottom: "0", left: "0", right: "0" }}>
+        <IndividualScreen />
+      </div>
+    </div>
   )
 }
 

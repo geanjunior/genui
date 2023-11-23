@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { GenLayoutPhenotype, DnaSequence, useDesignSystemDna } from "../../genetic";
 
-import "./layout.css";
-
 interface GenLayoutProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
 
 }
@@ -21,7 +19,7 @@ const GenLayout = ({ children, style, ...props }: GenLayoutProps) => {
   }, [style, designSystemDna]);
 
   return <>
-    <div className="gen-layout" style={{ ...stylePhen }} {...props}>{children}</div>
+    <div style={{ position: "absolute", top: "0", bottom: "0", overflow: "auto", ...stylePhen }} {...props}>{children}</div>
   </>
 }
 

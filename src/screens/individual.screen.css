@@ -1,0 +1,9 @@
+div,
+body {
+  margin: 0;
+  overflow: hidden;
+}
+
+section {
+  padding-bottom: 0;
+}

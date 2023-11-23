@@ -6,9 +6,8 @@ const HomeScreen = () => {
   const navigate = useNavigate();
 
   return <section className="home-section">
-    <button onClick={() => navigate("/random")}>Random Individual</button>
-    <br />
-    <button>Start Genetic Evolution</button>
+    <div><button onClick={() => navigate("/random")}>Random Individual</button></div>
+    <div><button onClick={() => navigate("/evolution")}>Start Genetic Evolution</button></div>
   </section>;
 }
 

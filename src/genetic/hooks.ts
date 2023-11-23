@@ -7,12 +7,12 @@ import {
 
 const useDesignSystemDna = (defaultGenotypes?: number[][]) : [
   Dna | undefined,
-  (genotypes: number[][]) => void
+  (genotypes?: number[][]) => void
 ] => {
 
   const { designSystemDna, setDesignSystemDna } = useContext(GeneticContext);
 
-  const _setDesignSystemDna = useCallback((genotypes: number[][]) => {
+  const _setDesignSystemDna = useCallback((genotypes?: number[][]) => {
     if (genotypes && setDesignSystemDna) {
       const phenotypes = parsePhenotypes(genotypes);
       setDesignSystemDna!({ genotypes, phenotypes });

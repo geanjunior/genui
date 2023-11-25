@@ -13,10 +13,7 @@ const mountParagraphGenotypeSchema = () => [
   { type: Searchspace.Values, values: [0] }, //text-indent
   {
     type: Searchspace.Values,
-    values: textAlignPhenotype.map((_, i) => i).filter(i => ![
-      textAlignPhenotype.indexOf("end"),
-      textAlignPhenotype.indexOf("right")
-    ].includes(i))
+    values: textAlignPhenotype.map((_, i) => i)
   }, //text-align
   {
     name: "paragraph.color", type: Searchspace.DistinctValuesFromRule,

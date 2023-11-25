@@ -1,7 +1,7 @@
 import { Phenotype } from "..";
 import type { Property } from 'csstype';
 
-const textAlignPhenotype = ["start", "end", "left", "right", "center", "justify", "match-parent"] as const;
+const textAlignPhenotype = ["left", "right", "center", "justify"] as const;
 
 interface TextBasedPhenotype extends Phenotype {
   marginTop?: string,

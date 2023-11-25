@@ -60,6 +60,8 @@ const parseToInputPhenotype = (
       color: colorPalette[inputGens[++i]],
       borderColor: colorPalette[inputGens[++i]],
       backgroundColor: colorPalette[inputGens[++i]],
+
+      width: '100%'
     }
   } as GenInputPhenotype;
 }

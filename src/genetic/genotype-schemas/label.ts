@@ -9,7 +9,6 @@ const mountLabelGenotypeSchema = () => [
   {
     type: Searchspace.Values,
     values: textAlignPhenotype.map((_, i) => i).filter(i => ![
-      textAlignPhenotype.indexOf("end"),
       textAlignPhenotype.indexOf("right")
     ].includes(i))
   }, //text-align

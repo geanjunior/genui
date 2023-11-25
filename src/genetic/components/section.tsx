@@ -36,7 +36,7 @@ const GenSection = ({ sectionType, children, style, ...props }: GenSectionProps)
     }
   }, [style, sectionType, designSystemDna]);
 
-  return <section style={{padding: 0, width: '100%', boxSizing: 'border-box'}} {...props}>
+  return <section style={{padding: 0, width: '100%', boxSizing: 'border-box', display: 'inline-block'}} {...props}>
     {(() => {
       switch (_variation) {
         case 1:

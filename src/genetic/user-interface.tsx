@@ -18,12 +18,16 @@ const UserInterface = () => {
     <GenHeader>Wellcome to Genetic UI</GenHeader>
     <GenSection>
       <GenParagraph>
-        GeneticUI is a cutting-edge React library that introduces genetic algorithms to UI design. By harnessing real-time interactivity, users can modify design variables like colors and spacing, prompting the genetic algorithm to evolve UI components accordingly. This innovative approach leads to a collaborative and ever-changing UI experience, reflecting the dynamic nature of genetic evolution.
+        GeneticUI is a cutting-edge React library that introduces genetic algorithms to UI design.
+        By harnessing real-time interactivity, users can modify design variables like colors and spacing,
+        prompting the genetic algorithm to evolve UI components accordingly.
+        This innovative approach leads to a collaborative and ever-changing UI experience,
+        reflecting the dynamic nature of genetic evolution.
       </GenParagraph>
 
       <form>
         <GenSection sectionType={DnaSequence.SecondSection}>
-          <GenSelectInput id="selector" label="Choose" style={{ width: "100%" }}
+          <GenSelectInput id="selector" label="Choose"
             //placeholder="Choose one option..."
             onChange={(evt: React.ChangeEvent<GenSelectInputElement>) => { console.log(evt.target.value); }}>
             <GenSelectOption label="Option One" value={1} />
@@ -37,11 +41,11 @@ const UserInterface = () => {
             <GenSelectOption label="Option Nine" value={"nine"} />
           </GenSelectInput>
 
-          <GenTextInput id="test-label" label="Label" style={{ width: "100%" }}
+          <GenTextInput id="test-label" label="Label"
             placeholder="Put your text here..."
             onChange={(evt: React.ChangeEvent<GenTextInputElement>) => { console.log(evt.target.value); }} />
 
-          <GenTextInput id="test-label2" label="Label" style={{ width: "100%" }} rows={1}
+          <GenTextInput id="test-label2" label="Label" rows={1}
             value={'Typed text...'}
             onChange={(evt: React.ChangeEvent<GenTextInputElement>) => { console.log(evt.target.value); }} />
         </GenSection>

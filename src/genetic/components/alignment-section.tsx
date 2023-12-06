@@ -17,7 +17,7 @@ const GenAlignmentSection = ({ children, style, childStyle, ...props }: GenAlign
       const sectionPhenotype = designSystemDna.phenotypes[DnaSequence.Section] as GenAlignmentSectionPhenotype;
       const defaultChildStyle = { display: 'inline-block', verticalAlign: 'text-top' };
 
-      setStylePhen({ ...sectionPhenotype.section, ...{ boxSizing: 'border-box', width: '100%' }, ...style });
+      setStylePhen({ ...sectionPhenotype.section, ...{ boxSizing: 'border-box', width: '100%', display: 'inline-block' }, ...style });
       setChildStyle({ ...sectionPhenotype.child, ...defaultChildStyle, ...childStyle });
     }
   }, [style, childStyle, designSystemDna]);

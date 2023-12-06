@@ -46,9 +46,9 @@ const UIColorPalette = ({ colors }: UIColorPaletteProps) => {
   }
 
   return <div style={componentStyle}>
-    {colors.map((color) =>
+    {colors.map((color, i) =>
       <div
-        key={color}
+        key={i}
         onMouseOver={() => mouseOverCallback(color)}
         onMouseOut={mouseOutCallback}
         onClick={() => clickHandler(color)}

@@ -3,7 +3,7 @@ import { generateRandomIndividual } from "..";
 const GENERATION_SIZE = 100;
 const SELECTION_SIZE = 5;
 const ELITE_SIZE = 1;
-const MUTATION_RATE = 10;
+const MUTATION_RATE = 0.1;
 
 type FitnessFunction = (chosen: number[][], individual: number[][]) => number;
 type SelectionFunction = (generation: number[][][], fitnesses: number[], size: number, excludeIndexes: number[]) => number[][][];
@@ -56,17 +56,17 @@ const middleSinglePointCrossOver: CrossoverFunction = (parentOne: number[][], pa
   return [...offspring.map(gens => [...gens])];
 }
 
-const myOwnMutationFunction: MutationFunction = (individual: number[][]) => {
+const uniformMutationFunction: MutationFunction = (individual: number[][]) => {
   const randomGens = generateRandomIndividual();
-  const mutated = [...individual];
+  const mutated = [...individual.map(component => [...component])];
 
-  for (let i = 0; i < MUTATION_RATE; i++) {
-    const componentIndex = Math.floor(Math.random() * individual.length);
-    const genIndex = Math.floor(Math.random() * individual[componentIndex].length);
-
-    mutated[componentIndex][genIndex] = randomGens[componentIndex][genIndex];
+  for (let i = 0; i < individual.length; i++) {
+    for (let k = 0; k < individual[i].length; k++) {
+      if (Math.random() < MUTATION_RATE) {
+        mutated[i][k] = randomGens[i][k];
+      }
+    }
   }
-
   return mutated;
 }
 
@@ -148,7 +148,7 @@ export {
 
   middleSinglePointCrossOver,
 
-  myOwnMutationFunction,
+  uniformMutationFunction,
 
   generateFirstGenerationAsync,
   generateNextGeneration

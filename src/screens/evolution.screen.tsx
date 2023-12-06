@@ -7,7 +7,7 @@ import {
   generateNextGeneration,
   hammingDistanceFitness,
   middleSinglePointCrossOver,
-  myOwnMutationFunction,
+  uniformMutationFunction,
   tournamentSelection,
   useDesignSystemDna
 } from "../genetic";
@@ -21,6 +21,7 @@ const EvolutionScreen = () => {
   const [generation, setGeneration] = useState<number[][][]>();
   const [sampling, setSampling] = useState<number[][][]>();
   const [currentGeneration, setCurrentGeneration] = useState<number>(0);
+  const [currentInteraction, setCurrentInteraction] = useState<number>(0);
 
   const selectSampleCallback = useCallback((i: number | number[][]) => {
     if (i instanceof Array) {
@@ -54,10 +55,12 @@ const EvolutionScreen = () => {
           hammingDistanceFitness,
           tournamentSelection,
           middleSinglePointCrossOver,
-          myOwnMutationFunction
+          uniformMutationFunction
         );
+
+        setCurrentGeneration(current => current + 1);
       }
-      setCurrentGeneration(current => current + GENERATIONS_BEFORE_INTERACTION);
+      setCurrentInteraction(current => current + 1);
       setGeneration(nextGeneration);
       setSampling([]);
     })();
@@ -67,6 +70,7 @@ const EvolutionScreen = () => {
     (async () => {
       if (!generation?.length) {
         setCurrentGeneration(current => current + 1);
+        setCurrentInteraction(current => current + 1);
         setGeneration(await generateFirstGenerationAsync(GENERATION_SIZE));
         return;
       }
@@ -89,10 +93,13 @@ const EvolutionScreen = () => {
           <button onClick={() => navigate("/")} style={{ cursor: 'pointer' }}>&larr;</button>
         </div>
         <div style={{ float: "right", margin: "10px 10px 0 10px" }}>
-          <button onClick={generateNewGenerationCallback} style={{ cursor: 'pointer' }}>&#x27F3;</button>
+          <button onClick={generateNewGenerationCallback} style={{ cursor: 'pointer' }}>NEXT</button>
         </div>
         <div style={{ float: "right", margin: "13px 10px 0 10px", color: '#fff' }}>
-          <span>Geração: {currentGeneration}</span>
+          <span>Interaction: {currentInteraction}</span>
+        </div>
+        <div style={{ float: "right", margin: "13px 10px 0 10px", color: '#fff' }}>
+          <span>Generation: {currentGeneration}</span>
         </div>
       </div>
       <div style={{ position: "absolute", textAlign: "center", overflow: "auto", paddingTop: "20px", backgroundColor: "#989898", top: "43px", bottom: "0", left: "0", right: "calc(100% - 150px)" }}>

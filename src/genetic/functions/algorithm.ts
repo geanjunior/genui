@@ -1,14 +1,12 @@
 import { generateRandomIndividual } from "..";
 
-const GENERATION_SIZE = 100;
 const SELECTION_SIZE = 5;
 const ELITE_SIZE = 1;
-const MUTATION_RATE = 0.1;
 
 type FitnessFunction = (chosen: number[][], individual: number[][]) => number;
 type SelectionFunction = (generation: number[][][], fitnesses: number[], size: number, excludeIndexes: number[]) => number[][][];
 type CrossoverFunction = (parentOne: number[][], parentTwo: number[][]) => number[][];
-type MutationFunction = (individual: number[][]) => number[][];
+type MutationFunction = (individual: number[][], rate: number) => number[][];
 
 const hammingDistanceFitness: FitnessFunction = (left: number[][], right: number[][]): number => {
   let distance = 0;
@@ -32,7 +30,7 @@ const truncationSelection: SelectionFunction = (generation: number[][][], fitnes
 };
 
 const tournamentSelection: SelectionFunction = (generation: number[][][], fitnesses: number[], size: number, excludeIndexes: number[] = []): number[][][] => {
-  const tournamentSize = generation.length * 0.1;
+  const tournamentSize = Math.floor(generation.length * 0.1);
 
   const population = generation.filter((_, i) => !excludeIndexes.includes(i)).filter((item, pos, self) => {
     const itemString = JSON.stringify(item);
@@ -48,21 +46,32 @@ const tournamentSelection: SelectionFunction = (generation: number[][][], fitnes
 };
 
 const middleSinglePointCrossOver: CrossoverFunction = (parentOne: number[][], parentTwo: number[][]): number[][] => {
-  const middlePosition = parentOne.length / 2;
+  const middlePosition = Math.round(parentOne.length / 2);
   const leftSide = parentOne.slice(0, middlePosition);
-  const rightSide = parentTwo.slice(middlePosition, parentTwo.length)
+  const rightSide = parentTwo.slice(middlePosition, parentTwo.length);
   const offspring = leftSide.concat(rightSide);
 
   return [...offspring.map(gens => [...gens])];
 }
 
-const uniformMutationFunction: MutationFunction = (individual: number[][]) => {
+const componentMiddleSinglePointCrossOver: CrossoverFunction = (parentOne: number[][], parentTwo: number[][]): number[][] => {
+  const offspring: number[][] = [];
+  for (let i = 0; i < parentOne.length; i++) {
+    const middlePosition = Math.round(parentOne[i].length / 2);
+    const leftSide = parentOne[i].slice(0, middlePosition);
+    const rightSide = parentTwo[i].slice(middlePosition, parentTwo[i].length);
+    offspring[i] = [...leftSide].concat([...rightSide]);
+  }
+  return offspring;
+}
+
+const uniformMutation: MutationFunction = (individual: number[][], rate: number) => {
   const randomGens = generateRandomIndividual();
   const mutated = [...individual.map(component => [...component])];
 
   for (let i = 0; i < individual.length; i++) {
     for (let k = 0; k < individual[i].length; k++) {
-      if (Math.random() < MUTATION_RATE) {
+      if (Math.random() < rate) {
         mutated[i][k] = randomGens[i][k];
       }
     }
@@ -73,6 +82,7 @@ const uniformMutationFunction: MutationFunction = (individual: number[][]) => {
 const generateNextGeneration = (
   chosen: number[][],
   generation: number[][][],
+  parameters: { mutationRate: number },
   fitnessFunction: FitnessFunction,
   selectionFunction: SelectionFunction,
   crossoverFunction: CrossoverFunction,
@@ -85,10 +95,13 @@ const generateNextGeneration = (
   const selectedIndividuals = selectionFunction === truncationSelection
     ? []
     : truncationSelection(generation, fitnesses, ELITE_SIZE, []);
-  const pendingSelectionCount = SELECTION_SIZE - selectedIndividuals.length;
-  const excludeIndexes = selectedIndividuals.map(individual => generation.indexOf(individual));
-  selectionFunction(generation, fitnesses, pendingSelectionCount, excludeIndexes)
-    .forEach(selected => selectedIndividuals.push(selected));
+  const pendingSelectionCount = Math.max(0, SELECTION_SIZE - selectedIndividuals.length);
+
+  if (pendingSelectionCount) {
+    const excludeIndexes = selectedIndividuals.map(individual => generation.indexOf(individual));
+    selectionFunction(generation, fitnesses, pendingSelectionCount, excludeIndexes)
+      .forEach(selected => selectedIndividuals.push(selected));
+  }
 
   // Crossover
   const offspring = [];
@@ -106,17 +119,18 @@ const generateNextGeneration = (
   }
 
   // Mutation
-  const mutatedOffspring = offspring.map(individual => mutationFunction(individual));
+  const mutatedOffspring = offspring.map(individual => mutationFunction(individual, parameters.mutationRate));
 
   // Replacement
   const nextGeneration = selectedIndividuals.concat(mutatedOffspring)
     .map(individual => JSON.stringify(individual))
     .filter((individual, i, self) => self.indexOf(individual) === i)
     .map(individual => JSON.parse(individual));
-  const nextGenerationFitnesses = nextGeneration.map(individual => fitnessFunction(chosen, individual));
-  nextGeneration.sort((a, b) => nextGenerationFitnesses[nextGeneration.indexOf(a)] - nextGenerationFitnesses[nextGeneration.indexOf(b)]);
 
-  return nextGeneration.slice(0, GENERATION_SIZE);
+  // const nextGenerationFitnesses = nextGeneration.map(individual => fitnessFunction(chosen, individual));
+  // nextGeneration.sort((a, b) => nextGenerationFitnesses[nextGeneration.indexOf(a)] - nextGenerationFitnesses[nextGeneration.indexOf(b)]);
+
+  return nextGeneration.slice(0, generation.length);
 }
 
 const generateFirstGenerationAsync = async (size: number) => {
@@ -137,18 +151,15 @@ export type {
 }
 
 export {
-  GENERATION_SIZE,
-  ELITE_SIZE,
-  MUTATION_RATE,
-
   hammingDistanceFitness,
 
   truncationSelection,
   tournamentSelection,
 
   middleSinglePointCrossOver,
+  componentMiddleSinglePointCrossOver,
 
-  uniformMutationFunction,
+  uniformMutation,
 
   generateFirstGenerationAsync,
   generateNextGeneration

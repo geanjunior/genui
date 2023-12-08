@@ -2,18 +2,19 @@ import { useNavigate } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import IndividualScreen from "./individual.screen";
 import {
-  GENERATION_SIZE,
   generateFirstGenerationAsync,
   generateNextGeneration,
   hammingDistanceFitness,
-  middleSinglePointCrossOver,
-  uniformMutationFunction,
+  //middleSinglePointCrossOver,
+  componentMiddleSinglePointCrossOver,
+  uniformMutation,
   tournamentSelection,
   useDesignSystemDna
 } from "../genetic";
 
+const GENERATION_SIZE = 100;
 const SAMPLING_SIZE = 26;
-const GENERATIONS_BEFORE_INTERACTION = 30;
+const GENERATIONS_BEFORE_INTERACTION = 5;
 
 const EvolutionScreen = () => {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ const EvolutionScreen = () => {
   const [sampling, setSampling] = useState<number[][][]>();
   const [currentGeneration, setCurrentGeneration] = useState<number>(0);
   const [currentInteraction, setCurrentInteraction] = useState<number>(0);
+  const [mutationRate, setMutationRate] = useState<number>(0.06);
 
   const selectSampleCallback = useCallback((i: number | number[][]) => {
     if (i instanceof Array) {
@@ -52,19 +54,19 @@ const EvolutionScreen = () => {
         nextGeneration = generateNextGeneration(
           designSystemDna!.genotypes,
           [...nextGeneration!.map(arr => [...arr])],
+          { mutationRate: mutationRate },
           hammingDistanceFitness,
           tournamentSelection,
-          middleSinglePointCrossOver,
-          uniformMutationFunction
+          componentMiddleSinglePointCrossOver, //middleSinglePointCrossOver,
+          uniformMutation
         );
-
         setCurrentGeneration(current => current + 1);
       }
       setCurrentInteraction(current => current + 1);
       setGeneration(nextGeneration);
       setSampling([]);
     })();
-  }, [designSystemDna, generation]);
+  }, [designSystemDna, generation, mutationRate]);
 
   useEffect(() => {
     (async () => {
@@ -77,6 +79,14 @@ const EvolutionScreen = () => {
 
       if (generation?.length && !sampling?.length) {
         const sampling = generation.slice(0, SAMPLING_SIZE);
+        if (designSystemDna) {
+          const samplingFitnesses = sampling.map(sample => hammingDistanceFitness(designSystemDna.genotypes, sample));
+          sampling.sort((a, b) => samplingFitnesses[sampling.indexOf(a)] - samplingFitnesses[sampling.indexOf(b)]);
+
+          sampling.forEach((ind, i) => {
+            console.log(`fitness[${i}]`, hammingDistanceFitness(designSystemDna.genotypes, ind));
+          })
+        }
 
         console.log("new sampling!");
         setSampling(sampling);
@@ -101,10 +111,16 @@ const EvolutionScreen = () => {
         <div style={{ float: "right", margin: "13px 10px 0 10px", color: '#fff' }}>
           <span>Generation: {currentGeneration}</span>
         </div>
+        <div style={{ float: "right", margin: "10px 10px 0 10px", color: '#fff' }}>
+          <span>Mutation Rate: </span>
+          <input type="number" style={{ width: "40px", textAlign: "right", padding: "2px" }}
+            value={naiveRound(mutationRate * 100, 2)}
+            onChange={evt => setMutationRate(Math.min(1, Math.max(0, Number(evt.target.value) / 100)))} /> %
+        </div>
       </div>
       <div style={{ position: "absolute", textAlign: "center", overflow: "auto", paddingTop: "20px", backgroundColor: "#989898", top: "43px", bottom: "0", left: "0", right: "calc(100% - 150px)" }}>
         {sampling?.map((_, i) => (
-          <div key={i} style={{ display: "inline-block", margin: '5px', width: "50px", height: "50px", border: designSystemDna?.genotypes === sampling[i] ? '5px solid #000' : undefined }}>
+          <div key={i} style={{ display: "inline-block", margin: '5px', width: "40px", height: "40px", border: designSystemDna?.genotypes === sampling[i] ? '5px solid #000' : '5px solid #FFF' }}>
             <button onClick={() => selectSampleCallback(i)} style={{ width: "100%", height: "100%", cursor: 'pointer' }}>{i + 1}</button>
           </div>
         ))}
@@ -116,6 +132,11 @@ const EvolutionScreen = () => {
       </div>
     </div>
   )
+}
+
+function naiveRound(num: number, decimalPlaces: number = 0) {
+  const p = Math.pow(10, decimalPlaces);
+  return Math.round(num * p) / p;
 }
 
 export default EvolutionScreen;

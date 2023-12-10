@@ -127,9 +127,6 @@ const generateNextGeneration = (
     .filter((individual, i, self) => self.indexOf(individual) === i)
     .map(individual => JSON.parse(individual));
 
-  // const nextGenerationFitnesses = nextGeneration.map(individual => fitnessFunction(chosen, individual));
-  // nextGeneration.sort((a, b) => nextGenerationFitnesses[nextGeneration.indexOf(a)] - nextGenerationFitnesses[nextGeneration.indexOf(b)]);
-
   return nextGeneration.slice(0, generation.length);
 }
 

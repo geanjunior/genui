@@ -1,7 +1,6 @@
 import { generateRandomIndividual } from "..";
 
-const SELECTION_SIZE = 5;
-const ELITE_SIZE = 1;
+const SELECTION_SIZE = 10;
 
 type FitnessFunction = (chosen: number[][], individual: number[][]) => number;
 type SelectionFunction = (generation: number[][][], fitnesses: number[], size: number, excludeIndexes: number[]) => number[][][];
@@ -21,21 +20,33 @@ const hammingDistanceFitness: FitnessFunction = (left: number[][], right: number
 }
 
 const truncationSelection: SelectionFunction = (generation: number[][][], fitnesses: number[], size: number): number[][][] => {
-  const sortedGeneration = generation.sort((a, b) => fitnesses[generation.indexOf(a)] - fitnesses[generation.indexOf(b)]);
-  return sortedGeneration
-    .map(individual => JSON.stringify(individual))
-    .filter((individual, i, arr) => arr.indexOf(individual) === i)
-    .map(individual => JSON.parse(individual))
-    .slice(0, size)
+  const population = [...generation];
+  const sortedGeneration = population.sort((a, b) => fitnesses[generation.indexOf(a)] - fitnesses[generation.indexOf(b)]);
+
+  const uniqueGeneration = sortedGeneration.reduce((acc, individual) => {
+    const key = JSON.stringify(individual);
+    if (!acc.has(key)) {
+      acc.set(key, individual);
+    }
+    return acc;
+  }, new Map());
+
+  return Array.from(uniqueGeneration.values()).slice(0, size);
 };
 
 const tournamentSelection: SelectionFunction = (generation: number[][][], fitnesses: number[], size: number, excludeIndexes: number[] = []): number[][][] => {
   const tournamentSize = Math.floor(generation.length * 0.1);
 
-  const population = generation.filter((_, i) => !excludeIndexes.includes(i)).filter((item, pos, self) => {
-    const itemString = JSON.stringify(item);
-    return self.findIndex(obj => JSON.stringify(obj) === itemString) === pos;
-  });
+  const population = generation
+    .filter((item, pos, self) => {
+      if (excludeIndexes.includes(pos))
+        return false;
+      const itemString = JSON.stringify(item);
+      if (excludeIndexes.some(excluded => JSON.stringify(self[excluded]) === itemString)) {
+        return false;
+      }
+      return self.findIndex(obj => JSON.stringify(obj) === itemString) === pos;
+    });
 
   return Array(size).fill(0).map(() => {
     const participants = Array(tournamentSize).fill(0).map(() => population[Math.floor(Math.random() * population.length)]);
@@ -82,33 +93,56 @@ const uniformMutation: MutationFunction = (individual: number[][], rate: number)
 const generateNextGeneration = (
   chosen: number[][],
   generation: number[][][],
-  parameters: { mutationRate: number },
-  fitnessFunction: FitnessFunction,
-  selectionFunction: SelectionFunction,
-  crossoverFunction: CrossoverFunction,
-  mutationFunction: MutationFunction): number[][][] => {
+  parameters: {
+    mutationRate?: number,
+    generationSize?: number,
+    descendantsPerIndividual?: number,
+
+    fitnessFunction?: FitnessFunction,
+    selectionFunction?: SelectionFunction,
+    crossoverFunction?: CrossoverFunction,
+    mutationFunction?: MutationFunction
+  }): number[][][] => {
+
+  //parameters
+  const mutationRate = parameters.mutationRate || Math.random();
+  const generationSize = parameters.generationSize || generation.length;
+  const descendantsPerIndividual = parameters.descendantsPerIndividual || 2;
+
+  const fitnessFunction = parameters.fitnessFunction || hammingDistanceFitness;
+  const selectionFunction = parameters.selectionFunction || tournamentSelection;
+  const crossoverFunction = parameters.crossoverFunction || componentMiddleSinglePointCrossOver;
+  const mutationFunction = parameters.mutationFunction || uniformMutation;
 
   // Fitness Evaluation
   const fitnesses = generation.map(individual => fitnessFunction(chosen, individual));
 
   // Selection
-  const selectedIndividuals = selectionFunction === truncationSelection
-    ? []
-    : truncationSelection(generation, fitnesses, ELITE_SIZE, []);
+  const selectedIndividuals = [chosen];
   const pendingSelectionCount = Math.max(0, SELECTION_SIZE - selectedIndividuals.length);
 
   if (pendingSelectionCount) {
-    const excludeIndexes = selectedIndividuals.map(individual => generation.indexOf(individual));
+    const excludeIndexes = selectedIndividuals.map(individual => generation.findIndex(pop => JSON.stringify(pop) === JSON.stringify(individual)));
     selectionFunction(generation, fitnesses, pendingSelectionCount, excludeIndexes)
       .forEach(selected => selectedIndividuals.push(selected));
   }
+  selectedIndividuals.sort((a, b) => fitnesses[generation.indexOf(a)] - fitnesses[generation.indexOf(b)]);
 
   // Crossover
+  const descendantCount: { [key: number]: number } = {};
   const offspring = [];
   for (let i = 0; i < selectedIndividuals.length; i++) {
     for (let j = 0; j < selectedIndividuals.length; j++) {
-      if (i != j)
-        offspring.push(crossoverFunction(selectedIndividuals[i], selectedIndividuals[j]));
+      if (i != j) {
+        const leftIndex = generation.indexOf(selectedIndividuals[i]);
+        const rightIndex = generation.indexOf(selectedIndividuals[j]);
+        descendantCount[leftIndex] = descendantCount[leftIndex] ? descendantCount[leftIndex] + 1 : 1;
+        descendantCount[rightIndex] = descendantCount[rightIndex] ? descendantCount[rightIndex] + 1 : 1;
+
+        if (descendantCount[leftIndex] <= descendantsPerIndividual && descendantCount[rightIndex] <= descendantsPerIndividual) {
+          offspring.push(crossoverFunction(selectedIndividuals[i], selectedIndividuals[j]));
+        }
+      }
     }
   }
   const notSelected = generation.filter(individual => !selectedIndividuals.some(selected => individual === selected));
@@ -119,15 +153,21 @@ const generateNextGeneration = (
   }
 
   // Mutation
-  const mutatedOffspring = offspring.map(individual => mutationFunction(individual, parameters.mutationRate));
+  const mutatedOffspring = offspring.map(individual => mutationFunction(individual, mutationRate));
 
   // Replacement
-  const nextGeneration = selectedIndividuals.concat(mutatedOffspring)
-    .map(individual => JSON.stringify(individual))
-    .filter((individual, i, self) => self.indexOf(individual) === i)
-    .map(individual => JSON.parse(individual));
+  const nextGeneration = Array.from(selectedIndividuals.concat(mutatedOffspring)
+    .reduce((acc, individual) => {
+      const key = JSON.stringify(individual);
+      if (!acc.has(key)) {
+        acc.set(key, individual);
+      }
+      return acc;
+    }, new Map())
+    .values());
 
-  return nextGeneration.slice(0, generation.length);
+  console.log('nextGeneration.length', nextGeneration.length);
+  return nextGeneration.slice(0, generationSize || generation.length);
 }
 
 const generateFirstGenerationAsync = async (size: number) => {

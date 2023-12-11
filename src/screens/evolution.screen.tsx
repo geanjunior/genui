@@ -8,12 +8,9 @@ import {
   componentMiddleSinglePointCrossOver,
   uniformMutation,
   tournamentSelection,
-  useDesignSystemDna
+  useDesignSystemDna,
+  truncationSelection
 } from "../genetic";
-
-const GENERATION_SIZE = 100;
-const SAMPLING_SIZE = 26;
-const GENERATIONS_BEFORE_INTERACTION = 5;
 
 type SampleListItemType = { sample: number[][], fitness: number | undefined, visible: boolean };
 
@@ -40,7 +37,7 @@ const SampleListItem = ({ index, selected, sample, onClick, onRemove, onUndoRemo
     sample.visible
       ? (
         <div
-          style={{ display: "inline-block", position: "relative", margin: '7px', width: "37px", height: "37px", borderRadius: "3px", border: selected ? '5px solid #000' : '5px solid #FFF', cursor: 'pointer', overflow: "visible" }}
+          style={{ display: "inline-block", position: "relative", margin: '7px', width: "37px", height: "25px", borderRadius: "3px", border: selected ? '5px solid #000' : '5px solid #FFF', cursor: 'pointer', overflow: "visible" }}
           onMouseEnter={() => setOnOver(true)}
           onMouseLeave={() => setOnOver(false)}
         >
@@ -75,14 +72,24 @@ const SampleListItem = ({ index, selected, sample, onClick, onRemove, onUndoRemo
   )
 }
 
+const topHeight = 63;
 const EvolutionScreen = () => {
   const navigate = useNavigate();
+
+  const [generationSize, setGenerationSize] = useState<number>(100);
+  const [mutationRate, setMutationRate] = useState<number>(0.06);
+  const [generationsBeforeInteraction, setGenerationsBeforeInteraction] = useState<number>(5);
+  const [samplingSize, setSamplingSize] = useState<number>(20);
+  const [descendantsPerIndividual, setDescendantsPerIndividual] = useState<number>(9);
+
+  type SamplingStrategyType = "truncate" | "tournament" | "random";
+  const [samplingStragegy, setSamplingStragegy] = useState<SamplingStrategyType>('truncate');
+
   const [designSystemDna, setDesignSystemDna] = useDesignSystemDna();
   const [generation, setGeneration] = useState<number[][][]>();
   const [sampling, setSampling] = useState<SampleListItemType[]>();
   const [currentGeneration, setCurrentGeneration] = useState<number>(0);
   const [currentInteraction, setCurrentInteraction] = useState<number>(0);
-  const [mutationRate, setMutationRate] = useState<number>(0.06);
 
   const selectSampleCallback = useCallback((i: number | number[][]) => {
     if (i instanceof Array) {
@@ -101,24 +108,32 @@ const EvolutionScreen = () => {
 
   const generateNewGenerationCallback = useCallback(() => {
     (async () => {
-      let nextGeneration = generation;
-      for (let i = 0; i < GENERATIONS_BEFORE_INTERACTION; i++) {
-        nextGeneration = generateNextGeneration(
-          designSystemDna!.genotypes,
-          [...nextGeneration!.map(arr => [...arr])],
-          { mutationRate: mutationRate },
-          hammingDistanceFitness,
-          tournamentSelection,
-          componentMiddleSinglePointCrossOver,
-          uniformMutation
+      const chosen = designSystemDna!.genotypes;
+      let population = generation;
+
+      for (let i = 0; i < generationsBeforeInteraction; i++) {
+        population = generateNextGeneration(
+          chosen,
+          population!,
+          {
+            mutationRate: mutationRate,
+            generationSize: generationSize,
+            descendantsPerIndividual: descendantsPerIndividual,
+
+            fitnessFunction: hammingDistanceFitness,
+            selectionFunction: tournamentSelection,
+            crossoverFunction: componentMiddleSinglePointCrossOver,
+            mutationFunction: uniformMutation
+          }
         );
         setCurrentGeneration(current => current + 1);
       }
+
       setCurrentInteraction(current => current + 1);
-      setGeneration(nextGeneration);
+      setGeneration(population);
       setSampling([]);
     })();
-  }, [designSystemDna, generation, mutationRate]);
+  }, [designSystemDna, generation, mutationRate, generationSize, generationsBeforeInteraction, descendantsPerIndividual]);
 
   const onSampleRemoveCallback = useCallback((_: React.MouseEvent<HTMLDivElement, MouseEvent>, __: SampleListItemType, index: number): void => {
     if (sampling?.filter(sample => sample.visible).length === 1) {
@@ -161,15 +176,41 @@ const EvolutionScreen = () => {
       if (!generation?.length) {
         setCurrentGeneration(current => current + 1);
         setCurrentInteraction(current => current + 1);
-        setGeneration(await generateFirstGenerationAsync(GENERATION_SIZE));
+        setGeneration(await generateFirstGenerationAsync(generationSize));
         return;
       }
 
       if (generation?.length && !sampling?.length) {
-        const sampling = generation.slice(0, SAMPLING_SIZE);
+        const sampling: number[][][] = [];
         if (designSystemDna) {
-          const sortingSamplingFitnesses = sampling.map(sample => hammingDistanceFitness(designSystemDna.genotypes, sample));
-          sampling.sort((a, b) => sortingSamplingFitnesses[sampling.indexOf(a)] - sortingSamplingFitnesses[sampling.indexOf(b)]);
+          const chosen = designSystemDna.genotypes;
+          const fitnesses = generation.map(inidividual => hammingDistanceFitness(chosen, inidividual));
+
+          if (samplingStragegy === 'tournament') {
+            const excluded = [generation.findIndex(individual => JSON.stringify(individual) === JSON.stringify(chosen))];
+            [chosen].concat(
+              tournamentSelection(generation, fitnesses, samplingSize - 1, excluded)
+
+            ).forEach(individual => sampling.push(individual));
+
+          } else if (samplingStragegy === 'random') {
+            const population = generation.filter(individual => individual !== chosen);
+            [chosen].concat(Array(samplingSize - 1).fill(0).map(() => {
+              const randomIndex = Math.floor(Math.random() * population.length);
+              const randomIndividual = population[randomIndex];
+              population.splice(randomIndex, 1); //remove to avoid duplication
+              return randomIndividual;
+
+            })).forEach(individual => sampling.push(individual));
+
+          } else {
+            truncationSelection(generation, fitnesses, samplingSize, []).forEach(individual => sampling.push(individual));
+          }
+
+          sampling.sort((a, b) => fitnesses[generation.indexOf(a)] - fitnesses[generation.indexOf(b)]);
+
+        } else {
+          generation.slice(0, samplingSize).forEach(individual => sampling.push(individual));
         }
 
         console.log("new sampling!");
@@ -183,15 +224,15 @@ const EvolutionScreen = () => {
         return;
       }
     })();
-  }, [designSystemDna, setDesignSystemDna, selectSampleCallback, generation, sampling]);
+  }, [designSystemDna, setDesignSystemDna, selectSampleCallback, generation, sampling, generationSize, samplingSize, samplingStragegy]);
 
   return (
     <div style={{ position: "absolute", top: "0", bottom: "0", left: "0", right: "0" }}>
-      <div style={{ position: "absolute", left: "0", right: "0", height: "43px", backgroundColor: "#000" }}>
-        <div style={{ float: "left", margin: "10px 0 0 10px" }}>
+      <div style={{ position: "absolute", left: "0", right: "0", height: `${topHeight}px`, backgroundColor: "#000", textAlign: "right" }}>
+        <div style={{ float: "left", margin: "13px 0 0 10px" }}>
           <button onClick={() => navigate("/")} style={{ cursor: 'pointer' }}>&larr;</button>
         </div>
-        <div style={{ float: "right", margin: "10px 10px 0 10px" }}>
+        <div style={{ float: "right", margin: "13px 10px 0 10px" }}>
           <button onClick={generateNewGenerationCallback} style={{ cursor: 'pointer' }}>NEXT</button>
         </div>
         <div style={{ float: "right", margin: "13px 10px 0 10px", color: '#fff' }}>
@@ -200,15 +241,47 @@ const EvolutionScreen = () => {
         <div style={{ float: "right", margin: "13px 10px 0 10px", color: '#fff' }}>
           <span>Generation: {currentGeneration}</span>
         </div>
-        <div style={{ float: "right", margin: "10px 10px 0 10px", color: '#fff' }}>
-          <span>Mutation Rate: </span>
+        <div style={{ float: "right", margin: "13px 10px 0 10px", color: '#fff' }}>
+          <div>Generations Before Interaction: </div>
+          <input type="number" style={{ width: "40px", textAlign: "center", padding: "2px" }}
+            value={generationsBeforeInteraction}
+            onChange={evt => setGenerationsBeforeInteraction(parseInt(evt.target.value) || generationsBeforeInteraction)} />
+        </div>
+        <div style={{ float: "right", margin: "13px 10px 0 10px", color: '#fff' }}>
+          <div>Generation Size: </div>
+          <input type="number" style={{ width: "40px", textAlign: "center", padding: "2px" }}
+            value={generationSize}
+            onChange={evt => setGenerationSize(parseInt(evt.target.value) || generationSize)} />
+        </div>
+        <div style={{ float: "right", margin: "13px 10px 0 10px", color: '#fff' }}>
+          <div>Mutation Rate (%): </div>
           <input type="number" style={{ width: "40px", textAlign: "center", padding: "2px" }}
             value={naiveRound(mutationRate * 100, 2)}
-            onChange={evt => setMutationRate(Math.min(1, Math.max(0, Number(evt.target.value) / 100)))} /> %
+            onChange={evt => setMutationRate(Math.min(1, Math.max(0, Number(evt.target.value) / 100)))} />
+        </div>
+        <div style={{ float: "right", margin: "13px 10px 0 10px", color: '#fff' }}>
+          <div>Descendants Per Individual: </div>
+          <input type="number" style={{ width: "40px", textAlign: "center", padding: "2px" }}
+            value={descendantsPerIndividual}
+            onChange={evt => setDescendantsPerIndividual(parseInt(evt.target.value) || descendantsPerIndividual)} />
+        </div>
+        <div style={{ float: "right", margin: "13px 10px 0 10px", color: '#fff' }}>
+          <div>Sampling Size: </div>
+          <input type="number" style={{ width: "40px", textAlign: "center", padding: "2px" }}
+            value={samplingSize}
+            onChange={evt => setSamplingSize(parseInt(evt.target.value) || samplingSize)} />
+        </div>
+        <div style={{ float: "right", margin: "13px 10px 0 10px", color: '#fff' }}>
+          <div>Sampling Strategy: </div>
+          <select onChange={evt => setSamplingStragegy(evt.target.value as SamplingStrategyType || 'truncate')}>
+            <option value="truncate">Truncate</option>
+            <option value="tournament">Tournament</option>
+            <option value="random">Random</option>
+          </select>
         </div>
       </div>
       <div
-        style={{ position: "absolute", textAlign: "center", overflow: "auto", paddingTop: "20px", backgroundColor: "#989898", top: "43px", bottom: "0", left: "0", right: "calc(100% - 150px)" }}
+        style={{ position: "absolute", textAlign: "center", overflow: "auto", paddingTop: "20px", backgroundColor: "#989898", top: `${topHeight}px`, bottom: "0", left: "0", right: "calc(100% - 150px)" }}
       >
         {sampling?.map((_, i) => (
           <SampleListItem
@@ -230,7 +303,7 @@ const EvolutionScreen = () => {
           />
         ))}
       </div>
-      <div style={{ position: "absolute", top: "43px", border: "2px solid #fff", borderLeft: "2px solid #fff", bottom: "0", left: "150px", right: "0" }}>
+      <div style={{ position: "absolute", top: `${topHeight}px`, border: "2px solid #fff", borderLeft: "2px solid #fff", bottom: "0", left: "150px", right: "0" }}>
         {designSystemDna
           ? <IndividualScreen />
           : <h3 style={{ textAlign: "center" }}>Processando a primeira geração...</h3>}

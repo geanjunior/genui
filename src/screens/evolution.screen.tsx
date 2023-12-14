@@ -23,55 +23,6 @@ interface SampleListItemProps {
   onUndoRemotion?: (evt: React.MouseEvent<HTMLButtonElement, MouseEvent>, sample: SampleListItemType, index: number) => void
 }
 
-const SampleListItem = ({ index, selected, sample, onClick, onRemove, onUndoRemotion }: SampleListItemProps) => {
-  const [onOver, setOnOver] = useState(false);
-  const onRemoveCallback = useCallback((evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    onRemove?.(evt, sample, index);
-  }, [index, sample, onRemove]);
-
-  const onUndoRemotionCallback = useCallback((evt: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    onUndoRemotion?.(evt, sample, index);
-  }, [index, sample, onUndoRemotion]);
-
-  return (
-    sample.visible
-      ? (
-        <div
-          style={{ display: "inline-block", position: "relative", margin: '7px', width: "37px", height: "25px", borderRadius: "3px", border: selected ? '5px solid #000' : '5px solid #FFF', cursor: 'pointer', overflow: "visible" }}
-          onMouseEnter={() => setOnOver(true)}
-          onMouseLeave={() => setOnOver(false)}
-        >
-          {sample.fitness !== undefined && <div
-            title={`Fitness: ${sample.fitness}`}
-            style={{ display: "flex", alignItems: "center", justifyContent: "center", position: "absolute", right: "-10px", bottom: "-10px", width: "20px", height: "20px", borderRadius: "10px", fontSize: "10px", textAlign: "center", backgroundColor: "#555", color: "#FFF" }}
-          >
-            {sample.fitness}
-          </div>}
-          {onOver && <div
-            title={`Remove Sample`}
-            style={{ display: "flex", alignItems: "center", justifyContent: "center", position: "absolute", right: "-10px", top: "-10px", width: "18px", height: "18px", border: "1px solid red", borderRadius: "10px", fontWeight: "bolder", textAlign: "center", backgroundColor: "#FFF", color: "red" }}
-            onClick={onRemoveCallback}
-          >
-            &#10799;
-          </div>}
-          <button
-            style={{ width: "100%", height: "100%", border: "0", cursor: 'pointer', backgroundColor: "#FFF" }}
-            onClick={onClick}>
-            {index + 1}
-          </button>
-        </div>
-      )
-      : (
-        <div style={{ display: "inline-block", position: "relative", margin: "7px", width: "37px", height: "37px", border: "5px solid #989898", overflow: "visible" }}>
-          <button
-            title="Undo Remotion"
-            style={{ width: "100%", height: "100%", border: "0", cursor: 'pointer', backgroundColor: "#AAA", color: "#FFF", fontSize: "20px" }}
-            onClick={onUndoRemotionCallback}>&#x21b6;</button>
-        </div>
-      )
-  )
-}
-
 const topHeight = 63;
 const EvolutionScreen = () => {
   const navigate = useNavigate();
@@ -217,14 +168,14 @@ const EvolutionScreen = () => {
         setSampling(sampling
           .map(sample => ({
             sample,
-            fitness: designSystemDna ? hammingDistanceFitness(designSystemDna.genotypes, sample) : undefined,
+            fitness: currentInteraction > 1 ? hammingDistanceFitness(designSystemDna!.genotypes, sample) : undefined,
             visible: true
           })));
         selectSampleCallback(sampling[0]);
         return;
       }
     })();
-  }, [designSystemDna, setDesignSystemDna, selectSampleCallback, generation, sampling, generationSize, samplingSize, samplingStragegy]);
+  }, [designSystemDna, setDesignSystemDna, selectSampleCallback, generation, sampling, generationSize, samplingSize, samplingStragegy, currentInteraction]);
 
   return (
     <div style={{ position: "absolute", top: "0", bottom: "0", left: "0", right: "0" }}>
@@ -309,6 +260,55 @@ const EvolutionScreen = () => {
           : <h3 style={{ textAlign: "center" }}>Processando a primeira geração...</h3>}
       </div>
     </div>
+  )
+}
+
+const SampleListItem = ({ index, selected, sample, onClick, onRemove, onUndoRemotion }: SampleListItemProps) => {
+  const [onOver, setOnOver] = useState(false);
+  const onRemoveCallback = useCallback((evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    onRemove?.(evt, sample, index);
+  }, [index, sample, onRemove]);
+
+  const onUndoRemotionCallback = useCallback((evt: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    onUndoRemotion?.(evt, sample, index);
+  }, [index, sample, onUndoRemotion]);
+
+  return (
+    sample.visible
+      ? (
+        <div
+          style={{ display: "inline-block", position: "relative", margin: '7px', width: "37px", height: "25px", borderRadius: "3px", border: selected ? '5px solid #000' : '5px solid #FFF', cursor: 'pointer', overflow: "visible" }}
+          onMouseEnter={() => setOnOver(true)}
+          onMouseLeave={() => setOnOver(false)}
+        >
+          {sample.fitness !== undefined && <div
+            title={`Fitness: ${sample.fitness}`}
+            style={{ display: "flex", alignItems: "center", justifyContent: "center", position: "absolute", right: "-10px", bottom: "-10px", width: "20px", height: "20px", borderRadius: "10px", fontSize: "10px", textAlign: "center", backgroundColor: "#555", color: "#FFF" }}
+          >
+            {sample.fitness}
+          </div>}
+          {onOver && <div
+            title={`Remove Sample`}
+            style={{ display: "flex", alignItems: "center", justifyContent: "center", position: "absolute", right: "-10px", top: "-10px", width: "18px", height: "18px", border: "1px solid red", borderRadius: "10px", fontWeight: "bolder", textAlign: "center", backgroundColor: "#FFF", color: "red" }}
+            onClick={onRemoveCallback}
+          >
+            &#10799;
+          </div>}
+          <button
+            style={{ width: "100%", height: "100%", border: "0", cursor: 'pointer', backgroundColor: "#FFF" }}
+            onClick={onClick}>
+            {index + 1}
+          </button>
+        </div>
+      )
+      : (
+        <div style={{ display: "inline-block", position: "relative", margin: "7px", width: "37px", height: "37px", border: "5px solid #989898", overflow: "visible" }}>
+          <button
+            title="Undo Remotion"
+            style={{ width: "100%", height: "100%", border: "0", cursor: 'pointer', backgroundColor: "#AAA", color: "#FFF", fontSize: "20px" }}
+            onClick={onUndoRemotionCallback}>&#x21b6;</button>
+        </div>
+      )
   )
 }
 

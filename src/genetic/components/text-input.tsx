@@ -18,6 +18,7 @@ const GenTextInput = React.forwardRef(({ label, id, style, value, rows, placehol
   const [_rows, setRows] = useState<number>(rows || 1);
   const [_label, setLabel] = useState<number>(0);
   const [_value, setValue] = useState<string | number | readonly string[] | undefined>(value || '');
+  const [_inputPhenotype, setInputPhenotype] = useState<GenInputPhenotype>();
 
   const [changeEvent, setChangeEvent] = useState<React.ChangeEvent<GenTextInputElement>>();
 
@@ -58,7 +59,9 @@ const GenTextInput = React.forwardRef(({ label, id, style, value, rows, placehol
     if (designSystemDna) {
       const inputPhenotype = designSystemDna.phenotypes[DnaSequence.Input] as GenInputPhenotype;
       const textInputPhenotype = designSystemDna.phenotypes[DnaSequence.TextInput] as GenTextInputPhenotype;
-      
+
+      console.log('rows || textInputPhenotype.rows', rows || textInputPhenotype.rows)
+      setInputPhenotype(inputPhenotype);
       setRows(rows || textInputPhenotype.rows);
       setLabel(inputPhenotype.label);
       setStylePhen({
@@ -104,35 +107,35 @@ const GenTextInput = React.forwardRef(({ label, id, style, value, rows, placehol
     {(() => {
       switch (_label) {
         case 1: return <>
-          <div style={{ display: 'table-cell', verticalAlign: 'middle' }}>
-            <GenLabel
-              htmlFor={id}
-              style={{ display: 'inline-block', marginRight: '10px' }}
-            >{label}</GenLabel>
-          </div>
+          <div style={{ display: 'table-cell', ...(_rows === 1 ? {} : _inputPhenotype?.labelBox) }}>
+          <GenLabel
+            htmlFor={id}
+            style={{ display: 'inline-block', marginRight: '10px' }}
+          >{label}</GenLabel>
+        </div >
           <div style={{ display: 'table-cell', width: (stylePhen as React.CSSProperties)?.width }}>
             {input}
           </div>
         </>
 
         case 2: return <>
-          <div style={{ textAlign: 'left', paddingLeft: stylePhen?.borderWidth }}>
-            <GenLabel
-              htmlFor={id}
-              style={{ display: 'inline-block', marginBottom: '5px' }}
-            >{label}</GenLabel>
-          </div>
-          <div>
-            {input}
-          </div>
-        </>
+  <div style={{ textAlign: 'left', paddingLeft: stylePhen?.borderWidth }}>
+    <GenLabel
+      htmlFor={id}
+      style={{ display: 'inline-block', marginBottom: '5px' }}
+    >{label}</GenLabel>
+  </div>
+  <div>
+    {input}
+  </div>
+</>
 
         default: return <>
-          {input}
-        </>
+  {input}
+</>
       }
-    })()}
-  </div>
+    }) ()}
+  </div >
 });
 
 export { GenTextInput };

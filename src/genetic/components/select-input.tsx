@@ -53,6 +53,7 @@ const GenSelectInput = React.forwardRef(({ label, id, style, value, placeholder,
   const [_variation, setVariation] = useState<number>(0);
   const [_label, setLabel] = useState<number>(0);
   const [_value, setValue] = useState<string | number | readonly string[] | undefined>(value || '');
+  const [_inputPhenotype, setInputPhenotype] = useState<GenInputPhenotype>();
 
   const [changeEvent, setChangeEvent] = useState<React.ChangeEvent<GenSelectInputElement>>();
 
@@ -69,6 +70,7 @@ const GenSelectInput = React.forwardRef(({ label, id, style, value, placeholder,
       const lineHeight = inputPhenotype.input.lineHeight ? parseInt(inputPhenotype.input.lineHeight.replace('px', '')) : undefined;
       const paddingTop = inputPhenotype.input.paddingTop ? parseInt(inputPhenotype.input.paddingTop.replace('px', '')) : undefined;
 
+      setInputPhenotype(inputPhenotype);
       setVariation(selectInputPhenotype.variation);
       setLabel(inputPhenotype.label);
       setStylePhen({
@@ -126,7 +128,7 @@ const GenSelectInput = React.forwardRef(({ label, id, style, value, placeholder,
     {(() => {
       switch (_label) {
         case 1: return <>
-          <div style={{ display: 'table-cell', verticalAlign: _variation == 0 ? undefined : 'middle' }}>
+          <div style={{ display: 'table-cell', ...(_variation === 1 ? _inputPhenotype?.labelBox : {}) }}>
             <GenLabel
               htmlFor={id}
               style={{ display: 'inline-block', marginRight: '10px' }}

@@ -1,7 +1,9 @@
 import { Searchspace, mountTypographyGenotypeSchema, getColorsRule, getContrastingColorsRule } from "..";
 
 const mountInputGenotypeSchema = () => [
-  { type: Searchspace.Range, from: 0, to: 2 }, //label
+  { type: Searchspace.Range, from: 1, to: 1 }, //label 2
+  { type: Searchspace.Range, from: 0, to: 2 }, //label-box { vertical-align }
+  { type: Searchspace.Range, from: 5, to: 15 }, //label-box { padding-top, padding-bottom }
 
   { type: Searchspace.Range, from: 1, to: 4 }, //border-width
   { type: Searchspace.Range, from: 0, to: 30 }, //border-radius

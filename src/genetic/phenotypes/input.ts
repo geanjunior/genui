@@ -19,6 +19,10 @@ interface GenInputStylePhenotype {
 
 interface GenInputPhenotype extends Phenotype {
   label: number,
+  labelBox: {
+    verticalAlign: 'middle' | 'top' | 'bottom',
+    padding: string,
+  },
   input: GenInputStylePhenotype
 }
 
@@ -37,6 +41,10 @@ const parseToInputPhenotype = (
 
   return {
     label: inputGens[i++],
+    labelBox: {
+      verticalAlign: ['middle', 'top', 'bottom'][inputGens[i++]],
+      padding: `${inputGens[i++]}px 0`,
+    },
     input: {
       //border
       borderStyle: 'solid',

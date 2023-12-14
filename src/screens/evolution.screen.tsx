@@ -302,7 +302,7 @@ const SampleListItem = ({ index, selected, sample, onClick, onRemove, onUndoRemo
         </div>
       )
       : (
-        <div style={{ display: "inline-block", position: "relative", margin: "7px", width: "37px", height: "37px", border: "5px solid #989898", overflow: "visible" }}>
+        <div style={{ display: "inline-block", position: "relative", margin: "7px", width: "37px", height: "25px", border: "5px solid #989898", overflow: "visible" }}>
           <button
             title="Undo Remotion"
             style={{ width: "100%", height: "100%", border: "0", cursor: 'pointer', backgroundColor: "#AAA", color: "#FFF", fontSize: "20px" }}

@@ -12,6 +12,7 @@ const GenSection = ({ sectionType, children, style, ...props }: GenSectionProps)
   const [childStyle, setChildStyle] = useState<React.CSSProperties>();
   const [_variation, setVariation] = useState<number>(0);
   const [_columns, setColumns] = useState<number>(1);
+  const [_maxWidth, setMaxWidth] = useState<string>('100%');
 
   useEffect(() => {
     if (designSystemDna) {
@@ -22,21 +23,22 @@ const GenSection = ({ sectionType, children, style, ...props }: GenSectionProps)
       switch (sectionPhenotype.variation) {
         case 1:
           sectionStyle = { ...sectionStyle, ...{ display: 'flex' } };
-          childStyle = { ...childStyle, ...{ display: 'flex', flex: 1, width  : '100%' } };
+          childStyle = { ...childStyle, ...{ display: 'flex', flex: 1, width: '100%' } };
           break;
-          default:
-            childStyle = { ...childStyle, ...{ width: `${[100, 45, 28][sectionPhenotype.columns - 1]}%`, boxSizing: 'border-box' } };
-            break;
+        default:
+          childStyle = { ...childStyle, ...{ width: `${[100, 45, 28][sectionPhenotype.columns - 1]}%`, boxSizing: 'border-box' } };
+          break;
       }
 
       setVariation(sectionPhenotype.variation);
       setColumns(sectionPhenotype.columns);
+      setMaxWidth(sectionPhenotype.maxWidth);
       setStylePhen({ ...sectionPhenotype.section, ...sectionStyle, ...style });
       setChildStyle({ ...sectionPhenotype.child, ...childStyle });
     }
   }, [style, sectionType, designSystemDna]);
 
-  return <section style={{padding: 0, width: '100%', boxSizing: 'border-box', display: 'inline-block'}} {...props}>
+  return <>
     {(() => {
       switch (_variation) {
         case 1:
@@ -45,17 +47,17 @@ const GenSection = ({ sectionType, children, style, ...props }: GenSectionProps)
             const rows = [];
             for (let i = 0; _children.length; i++) {
               const cols = _children.splice(0, _columns);
-              rows.push(<div style={{ ...stylePhen }} key={`${props.id}_${i}`}>
+              rows.push((<div style={{ ...stylePhen }} key={`${props.id}_${i}`}>
                 {cols.map((child, k) => <div key={`${props.id}_${i}_${k}`} style={childStyle}>{child}</div>)}
-              </div>);
+              </div>));
             }
-            return rows;
+            return <section style={{ padding: 0, width: '100%', maxWidth: _maxWidth, boxSizing: 'border-box', display: 'inline-block' }} {...props}>{rows}</section>;
           })()
         default:
           return <GenAlignmentSection childStyle={childStyle} {...props}>{children}</GenAlignmentSection>;
       }
     })()}
-  </section>
+  </>
 }
 
 export { GenSection };

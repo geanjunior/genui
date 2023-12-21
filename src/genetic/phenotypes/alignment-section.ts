@@ -9,6 +9,7 @@ interface GenAlignmentSectionChildStylePhenotype {
 }
 
 interface GenAlignmentSectionPhenotype extends Phenotype {
+  maxWidth: string;
   section: GenAlignmentSectionStylePhenotype;
   child: GenAlignmentSectionChildStylePhenotype;
 }
@@ -22,6 +23,8 @@ const parseToAlignmentSectionPhenotype = (
 
   let i = 0;
   return {
+    maxWidth: ['100%', '1024px', '720px', '500px'][sectionGens[i++]],
+    
     section: {
       textAlign: textAlignPhenotype[sectionGens[i++]],
     } as GenAlignmentSectionStylePhenotype,

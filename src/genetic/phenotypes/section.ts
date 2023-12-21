@@ -16,6 +16,7 @@ interface GenSectionChildStylePhenotype {
 interface GenSectionPhenotype extends GenAlignmentSectionPhenotype {
   variation: number;
   columns: number;
+  maxWidth: string;
 }
 
 const parseToSectionPhenotype = (
@@ -30,6 +31,7 @@ const parseToSectionPhenotype = (
   return {
     variation: variation = sectionGens[i++],
     columns: sectionGens[i++],
+    maxWidth: ['100%', '1024px', '720px', '500px'][sectionGens[i++]],
     
     section: {
       textAlign: textAlignPhenotype[sectionGens[i++]],

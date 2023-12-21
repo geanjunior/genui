@@ -60,7 +60,6 @@ const GenTextInput = React.forwardRef(({ label, id, style, value, rows, placehol
       const inputPhenotype = designSystemDna.phenotypes[DnaSequence.Input] as GenInputPhenotype;
       const textInputPhenotype = designSystemDna.phenotypes[DnaSequence.TextInput] as GenTextInputPhenotype;
 
-      console.log('rows || textInputPhenotype.rows', rows || textInputPhenotype.rows)
       setInputPhenotype(inputPhenotype);
       setRows(rows || textInputPhenotype.rows);
       setLabel(inputPhenotype.label);

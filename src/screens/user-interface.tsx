@@ -11,7 +11,7 @@ import {
   GenSelectOption,
   GenTextInput,
   GenTextInputElement
-} from ".";
+} from "../genetic";
 
 const UserInterface = () => {
   return <GenLayout>

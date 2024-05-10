@@ -1,4 +1,5 @@
 export * from "./color-palette";
+export * from "./typography";
 export * from "./layout";
 export * from "./alignment-section";
 export * from "./section";

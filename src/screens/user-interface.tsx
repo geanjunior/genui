@@ -18,9 +18,9 @@ const UserInterface = () => {
     <GenHeader>Wellcome to Genetic UI</GenHeader>
     <GenSection>
       <GenParagraph>
-        GeneticUI is a cutting-edge React library that introduces genetic algorithms to UI design.
-        By harnessing real-time interactivity, users can modify design variables like colors and spacing,
-        prompting the genetic algorithm to evolve UI components accordingly.
+        GeneticUI is a cutting-edge React library that introduces genetic algorithms into UI design.
+        By leveraging real-time interactivity, programmers and designers can modify design variables
+        like colors and spacing, causing the genetic algorithm to evolve UI components accordingly.
         This innovative approach leads to a collaborative and ever-changing UI experience,
         reflecting the dynamic nature of genetic evolution.
       </GenParagraph>
@@ -44,7 +44,7 @@ const UserInterface = () => {
           <GenTextInput id="test-label" label="Label"
             placeholder="Put your text here..."
             onChange={(evt: React.ChangeEvent<GenTextInputElement>) => { console.log(evt.target.value); }} />
-
+          
           <GenTextInput id="test-label2" label="Label" rows={1}
             value={'Typed text...'}
             onChange={(evt: React.ChangeEvent<GenTextInputElement>) => { console.log(evt.target.value); }} />

@@ -6,10 +6,7 @@ const mountSectionSchema = () => [
   { type: Searchspace.Values, values: [0, 1, 2, 3] }, //max-width
 
   /* row */
-  {
-    type: Searchspace.Values,
-    values: textAlignPhenotype.map((_, i) => i)
-  }, //text-align
+  { type: Searchspace.Range, from: 0, to: textAlignPhenotype.length - 1 }, //text-align
   { type: Searchspace.Values, values: [0, 1] }, //flex-direction
   { type: Searchspace.Values, values: [0, 1, 2, 3] }, //align-items
 

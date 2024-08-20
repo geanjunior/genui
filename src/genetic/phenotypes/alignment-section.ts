@@ -1,4 +1,4 @@
-import { DnaSequence, Phenotype, textAlignPhenotype } from "..";
+import { DnaSequence, maxWidthPhenotypes, Phenotype, textAlignPhenotype } from "..";
 import type { Property } from 'csstype';
 
 interface GenAlignmentSectionStylePhenotype {
@@ -14,8 +14,6 @@ interface GenAlignmentSectionPhenotype extends Phenotype {
   child: GenAlignmentSectionChildStylePhenotype;
 }
 
-const maxComponentWidthList = ['100%', '1024px', '720px', '500px'];
-
 const parseToAlignmentSectionPhenotype = (
   genotypes: number[][]
 ): GenAlignmentSectionPhenotype => {
@@ -24,7 +22,7 @@ const parseToAlignmentSectionPhenotype = (
 
   let i = 0;
   return {
-    maxWidth: maxComponentWidthList[sectionGens[i++]],
+    maxWidth: maxWidthPhenotypes[sectionGens[i++]],
     
     section: {
       textAlign: textAlignPhenotype[sectionGens[i++]],

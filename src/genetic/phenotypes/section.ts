@@ -1,4 +1,4 @@
-import { DnaSequence, GenAlignmentSectionPhenotype, GenAlignmentSectionStylePhenotype, textAlignPhenotype } from "..";
+import { DnaSequence, GenAlignmentSectionPhenotype, GenAlignmentSectionStylePhenotype, maxWidthPhenotypes, textAlignPhenotype } from "..";
 import type { Property } from 'csstype';
 
 const flexDirectionPhenotype = ['row', 'row-reverse', 'column', 'column-reverse'];
@@ -31,7 +31,7 @@ const parseToSectionPhenotype = (
   return {
     variation: variation = sectionGens[i++],
     columns: sectionGens[i++],
-    maxWidth: ['100%', '1024px', '720px', '500px'][sectionGens[i++]],
+    maxWidth: maxWidthPhenotypes[sectionGens[i++]],
     
     section: {
       textAlign: textAlignPhenotype[sectionGens[i++]],

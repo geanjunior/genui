@@ -1,7 +1,7 @@
 import { Searchspace, textAlignPhenotype } from "..";
 
 const mountSectionSchema = () => [
-  { type: Searchspace.Values, values: [0, 1] }, //variation
+  { type: Searchspace.Values, values: [0, 1] }, //variation - (0 = alignment-session, 1 = flexbox-section)
   { type: Searchspace.Values, values: [1, 2] }, //colums
   { type: Searchspace.Values, values: [0, 1, 2, 3] }, //max-width
 

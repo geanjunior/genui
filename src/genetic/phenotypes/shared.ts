@@ -2,6 +2,7 @@ import { Phenotype } from "..";
 import type { Property } from 'csstype';
 
 const textAlignPhenotype = ["left", "right", "center", "justify"] as const;
+const maxWidthPhenotypes = ['100%', '1024px', '720px', '500px'];
 
 interface TextBasedPhenotype extends Phenotype {
   marginTop?: string,
@@ -17,4 +18,4 @@ interface TextBasedPhenotype extends Phenotype {
 
 export type { TextBasedPhenotype }
 
-export { textAlignPhenotype }
+export { textAlignPhenotype, maxWidthPhenotypes }

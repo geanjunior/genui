@@ -38,7 +38,7 @@ enum DnaSequence {
   SelectInput
 }
 
-const genotypeSequenceMap = ((): GenotypeSchemas[][] => {
+const genotypeSchemaMap = ((): GenotypeSchemas[][] => {
   const map = [];
   map[DnaSequence.ColorPalette] = mountColorPaletteSchema();
   map[DnaSequence.Typography] = mountTypographyGenotypeSchema();
@@ -56,14 +56,9 @@ const genotypeSequenceMap = ((): GenotypeSchemas[][] => {
   return map;
 })();
 
-const genotypeSchema = Object
-  .values(DnaSequence)
-  .filter(i => !isNaN(Number(i)))
-  .map(i => (genotypeSequenceMap[i as DnaSequence] || null));
-
 const generateRandomIndividual = () => {
   const individualGens: IndividualSchemaAndGen[][] = [];
-  genotypeSchema.forEach(elementSchema => {
+  genotypeSchemaMap.forEach(elementSchema => {
     const elementGens: IndividualSchemaAndGen[] = [];
     individualGens.push(elementGens);
     if (elementSchema) {
@@ -162,7 +157,5 @@ const generateRandomGenotypeDistinctValueFromValuesFromRule = (
 
 export {
   DnaSequence,
-  genotypeSequenceMap,
-  genotypeSchema,
   generateRandomIndividual
 }
